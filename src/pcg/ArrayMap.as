@@ -49,8 +49,8 @@ package pcg
 		
 		public function getTile(x:int, y:int):int
 		{
-			if (x < 0 || x >= width -1 || y < 0 || y >= height - 1)
-				return Level.ROCK;
+			if (x < 0 || x >= width || y < 0 || y >= height)
+				return Level.TOP_ROCK;
 				
 			return _map[y][x];
 		}

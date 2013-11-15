@@ -12,7 +12,7 @@ package pcg
 	{
 		public function Main():void 
 		{
-			super(720, 480 - 32, GameState, 2);
+			super(720, 480 - 32, GameState, 2, 60, 60);
 		}
 		
 	}

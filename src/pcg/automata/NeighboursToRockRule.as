@@ -19,20 +19,20 @@ package pcg.automata
 		{
 			var rockNeighbours:int = 0;
 			
-			if (map.getTile(x - 1, y - 1) == Level.ROCK) rockNeighbours++;
-			if (map.getTile(x, y - 1) == Level.ROCK) rockNeighbours++;
-			if (map.getTile(x + 1, y - 1) == Level.ROCK) rockNeighbours++;
+			if (Level.isSolidTile(map.getTile(x - 1, y - 1))) rockNeighbours++;
+			if (Level.isSolidTile(map.getTile(x, y - 1))) rockNeighbours++;
+			if (Level.isSolidTile(map.getTile(x + 1, y - 1))) rockNeighbours++;
 			
 			
-			if (map.getTile(x - 1, y) == Level.ROCK) rockNeighbours++;
-			if (map.getTile(x + 1, y) == Level.ROCK) rockNeighbours++;
+			if (Level.isSolidTile(map.getTile(x - 1, y))) rockNeighbours++;
+			if (Level.isSolidTile(map.getTile(x + 1, y))) rockNeighbours++;
 			
-			if (map.getTile(x - 1, y + 1) == Level.ROCK) rockNeighbours++;
-			if (map.getTile(x, y + 1) == Level.ROCK) rockNeighbours++;
-			if (map.getTile(x + 1, y + 1) == Level.ROCK) rockNeighbours++;
+			if (Level.isSolidTile(map.getTile(x - 1, y + 1))) rockNeighbours++;
+			if (Level.isSolidTile(map.getTile(x, y + 1))) rockNeighbours++;
+			if (Level.isSolidTile(map.getTile(x + 1, y + 1))) rockNeighbours++;
 			
 			if (rockNeighbours >= this._neighboursNeeded)
-				return Level.ROCK;
+				return Level.MIDDLE_ROCK
 			else
 				return Level.EMPTY;
 		}
