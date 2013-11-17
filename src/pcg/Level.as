@@ -42,6 +42,8 @@ package pcg
 		private var _width:uint;
 		private var _height:uint;
 		
+		private var _debugText:FlxText;
+		
 		public function Level(width:uint = 48, height:uint = 28) 
 		{
 			this._width = width;
@@ -63,9 +65,12 @@ package pcg
 			_solidTilemap.loadMap(_map.toString(), _tilesetImage, 16, 16);
 			_decorationTilemap.loadMap(_map.toString(), _tilesetImage, 16, 16);
 			
+			_debugText = new FlxText(5, 5, 200, "");
+			
 			add(_solidTilemap);
 			add(_decorationTilemap);
 			add(_fluidManager);
+			add(_debugText);
 		}
 		
 		private function addBackground():void
@@ -134,6 +139,8 @@ package pcg
 				resetTilemap();
 				_solidTilemap.loadMap(_map.toString(), _tilesetImage, 16, 16);
 			}
+			
+			_debugText.text = "Step time: " + _fluidManager.debugStepSpeed;
 		}
 		
 		private function resetTilemap():void

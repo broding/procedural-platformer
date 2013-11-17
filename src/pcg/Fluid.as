@@ -51,6 +51,11 @@ package pcg
 		
 		public function set still(value:Boolean):void 
 		{
+			if (_still)
+				makeGraphic(16, 16, 0xaaff00ff);
+			else
+				makeGraphic(16, 16, 0xaa0000ff);
+				
 			_still = value;
 		}
 	}

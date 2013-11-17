@@ -14,11 +14,17 @@ package pcg
 		private var _newFluids:Array = new Array();
 		private var _removeFluids:Array = new Array();
 		
+		private var _debugStepSpeed:Number;
+		private var _startTime:Date;
+		private var _endTime:Date;
+		
 		public function FluidManager() 
 		{
 			stepSpeed = 0.02;
 			_stepTimer = 0;
 			_newFluids = new Array();
+			_startTime = new Date();
+			_endTime = new Date();
 		}
 		
 		override public function update():void 
@@ -53,6 +59,8 @@ package pcg
 		
 		public function step():void
 		{
+			_startTime = new Date();
+			
 			_newFluids.splice(0);
 			_removeFluids.splice(0);
 			
@@ -64,6 +72,7 @@ package pcg
 					flowDown(fluid);
 				else
 					flowSideways(fluid);
+					
 			}
 			
 			for (var j:int = 0; j < _newFluids.length; j++)
@@ -71,6 +80,10 @@ package pcg
 				
 			for (j = 0; j < _removeFluids.length; j++)
 				remove(_removeFluids[j], true);
+				
+			_endTime = new Date();
+			
+			_debugStepSpeed = _endTime.getMilliseconds() - _startTime.getMilliseconds();
 		}
 		
 		private function isWaterTile(x:uint, y:uint):Boolean
@@ -146,23 +159,9 @@ package pcg
 			fluid.y = y;
 		}
 		
-		private function checkStill():void
+		public function get debugStepSpeed():Number 
 		{
-			for (var i:int = 0; i < this.length; i++)
-			{
-				var fluid:Fluid = members[i];
-				
-				for (var j:int = 0; j < this.length; j++)
-				{
-					var otherFluid:Fluid = members[j];
-					
-					if (fluid.x == otherFluid.x && fluid.y == otherFluid.y && fluid != otherFluid)
-					{
-						fluid.still = true;
-						otherFluid.still = true;
-					}
-				}
-			}
+			return _debugStepSpeed;
 		}
 	}
 
