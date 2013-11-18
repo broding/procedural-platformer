@@ -40,6 +40,9 @@ package pcg
 		public static const ROCK_FLOOR2:int = 12;
 		public static const HANGING_GRASS:int = 13;
 		
+		private var _x:int;
+		private var _y:int;
+		
 		private var _map:ArrayMap;
 		private var _solidTilemap:FlxTilemap;
 		private var _decorationTilemap:FlxTilemap;
@@ -160,6 +163,27 @@ package pcg
 			}
 			return point; 
 		}
+
+		public function get x():int
+		{
+			return _x;
+		}
+
+		public function set x(value:int):void
+		{
+			_x = value;
+		}
+
+		public function get y():int
+		{
+			return _y;
+		}
+
+		public function set y(value:int):void
+		{
+			_y = value;
+		}
+
 		
 	}
 

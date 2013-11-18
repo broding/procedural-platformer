@@ -1,5 +1,6 @@
 package pcg 
 {
+	import org.flixel.FlxEmitter;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxState;
@@ -9,6 +10,7 @@ package pcg
 	import pcg.painter.HangingGrassPaint;
 	import pcg.painter.Painter;
 	import pcg.painter.RockFloorPaint;
+	import org.flixel.FlxParticle;
 
 	/**
 	 * ...
@@ -18,10 +20,23 @@ package pcg
 	{
 		private var _player:Player;
 		private var _level:Area;
+		private var _emitter:FlxEmitter;
 		
 		public function GameState() 
 		{
+			_emitter = new FlxEmitter();
+			for(var i:int = 0; i < 5; i++)
+			{
+				var particle:FlxParticle = new FlxParticle();
+				particle.makeGraphic(2, 2, 0xffffffff);
+				particle.exists = false;
+				_emitter.add(particle);
+			}
+			
 			this.initLevel();
+			
+			_emitter.start(true, 2, 0.1, 3);
+			add(_emitter);
 		}
 		
 		private function initLevel():void
@@ -33,8 +48,6 @@ package pcg
 			}
 			
 			_player = new Player();
-			_player.x = 200;
-			_player.y = 200;
 			
 			var generator:AreaGenerator = new DefaultAreaGenerator();
 			
@@ -44,14 +57,16 @@ package pcg
 			painter.addPaint(new RockFloorPaint());
 			_level.paint(painter);
 			
-			add(_level);
 			
 			_player = new Player();
 			var spawnpoint:FlxPoint = new FlxPoint();
 			spawnpoint = _level.getPlayerSpawnPoint(3);
 			_player.x = spawnpoint.x;
 			_player.y = spawnpoint.y;
+			
+			add(_level);
 			add(_player);
+			add(_player.bombs);
 		}
 		
 		override public function update():void 
@@ -59,6 +74,7 @@ package pcg
 			super.update();
 			
 			FlxG.collide(_player, _level.collideTilemap);
+			FlxG.collide(_player.bombs, _level.collideTilemap);
 			
 			if(FlxG.keys.justPressed("SPACE"))
 			{

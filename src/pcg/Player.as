@@ -1,6 +1,8 @@
 package pcg 
 {
-	import org.flixel.*;
+	import org.flixel.FlxG;
+	import org.flixel.FlxGroup;
+	import org.flixel.FlxSprite;
 	/**
 	 * ...
 	 * @author Bas Roding
@@ -15,9 +17,12 @@ package pcg
 		
 		private var _jumping:Boolean = false;
 		private var _jumpedAgo:Number = 0;
+		private var _bombs:FlxGroup;
 		
 		public function Player() 
 		{
+			_bombs = new FlxGroup();
+			
 			this.loadGraphic(_playerImage, true, true, 16, 16);
 			this.addAnimation("idle", [0, 1, 2, 3], 10);
 			this.addAnimation("walk", [4, 5, 6, 7], 10);
@@ -51,8 +56,24 @@ package pcg
 			{
 				jump();
 			}
+			
+			if(FlxG.keys.justPressed("X"))
+			{
+				dropBomb();
+			}
 				
 			velocity.y += 10;
+		}
+		
+		private function dropBomb():void
+		{
+			trace("bomb");
+			
+			var bomb:Bomb = new Bomb();
+			bomb.x = x;
+			bomb.y = y;
+			
+			_bombs.add(bomb);
 		}
 		
 		private function checkAnimation():void
@@ -78,6 +99,12 @@ package pcg
 			}
 			
 		}
+
+		public function get bombs():FlxGroup
+		{
+			return _bombs;
+		}
+
 		
 	}
 
