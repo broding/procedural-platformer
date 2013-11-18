@@ -1,6 +1,5 @@
 package pcg 
 {
-	import mx.core.FlexApplicationBootstrap;
 	import org.flixel.*;
 	/**
 	 * ...
@@ -40,7 +39,7 @@ package pcg
 			}
 		}
 		
-		public function init(map:ArrayMap)
+		public function init(map:ArrayMap):void
 		{
 			_map = map;
 			

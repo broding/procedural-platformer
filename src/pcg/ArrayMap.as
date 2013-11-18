@@ -55,7 +55,7 @@ package pcg
 			return _map[y][x];
 		}
 		
-		public function setTile(value:int, x:int, y:int)
+		public function setTile(value:int, x:int, y:int):void
 		{
 			_map[y][x] = value;
 		}
