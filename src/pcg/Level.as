@@ -11,6 +11,7 @@ package pcg
 	import pcg.painter.RockFloorPaint;
 	import pcg.painter.SingleBlockPaint;
 	import pcg.painter.TopBlockPaint;
+	import pcg.tilegenerators.GradientTileGenerator;
 	import pcg.tilegenerators.SimpleTileGenerator;
 	/**
 	 * ...
@@ -55,7 +56,7 @@ package pcg
 			_solidTilemap = new FlxTilemap();
 			_decorationTilemap = new FlxTilemap();
 			
-			_map = new ArrayMap(new SimpleTileGenerator(), _width, _height);
+			_map = new ArrayMap(new GradientTileGenerator(), _width, _height);
 			
 			var itterator:RuleItterator = new RuleItterator();
 			itterator.addRule(new NeighboursToRockRule(5));
@@ -127,7 +128,7 @@ package pcg
 			
 			if (FlxG.keys.justPressed("X"))
 			{
-				_map = new ArrayMap(new SimpleTileGenerator(), 45, 28);
+				_map = new ArrayMap(new GradientTileGenerator(), 45, 28);
 				
 				var painter:Painter = new Painter();
 				painter.addPaint(new MiddleBlockPaint());

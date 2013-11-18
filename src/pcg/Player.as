@@ -34,10 +34,20 @@ package pcg
 			
 			checkAnimation();
 			
-			if (FlxG.keys.LEFT)
+			if (FlxG.keys.LEFT && FlxG.keys.UP) {
+				velocity.x = -WALK_SPEED;
+				jump();
+			}
+			else if (FlxG.keys.RIGHT && FlxG.keys.UP) {
+				velocity.x = WALK_SPEED;
+				jump();
+			}
+			else if (FlxG.keys.LEFT)
 				velocity.x = -WALK_SPEED;
 			else if (FlxG.keys.RIGHT)
 				velocity.x = WALK_SPEED;
+			else if (FlxG.keys.UP)
+				jump();
 			else
 				velocity.x = 0;
 				
