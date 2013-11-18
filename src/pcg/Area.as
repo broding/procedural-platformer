@@ -17,7 +17,7 @@ package pcg
 	 * ...
 	 * @author Bas Roding
 	 */
-	public class Level extends FlxGroup
+	public class Area extends FlxGroup
 	{
 		[Embed(source = "../../assets/tileset.png")] private var _tilesetImage:Class;
 		[Embed(source = "../../assets/bg.png")] private var _bgImage:Class;
@@ -45,7 +45,7 @@ package pcg
 		
 		private var _debugText:FlxText;
 		
-		public function Level(width:uint = 48, height:uint = 28) 
+		public function Area(width:uint = 48, height:uint = 28) 
 		{
 			this._width = width;
 			this._height = height;
@@ -164,7 +164,7 @@ package pcg
 		
 		public static function isSolidTile(tileIndex:int):Boolean
 		{
-			if (tileIndex == Level.TOP_ROCK || tileIndex == Level.SINGLE_ROCK || tileIndex == Level.MIDDLE_ROCK2 || tileIndex == Level.MIDDLE_ROCK || tileIndex == Level.BOTTOM_ROCK)
+			if (tileIndex == Area.TOP_ROCK || tileIndex == Area.SINGLE_ROCK || tileIndex == Area.MIDDLE_ROCK2 || tileIndex == Area.MIDDLE_ROCK || tileIndex == Area.BOTTOM_ROCK)
 				return true;
 			else 
 				return false;

@@ -9,11 +9,11 @@ package pcg
 	public class GameState extends FlxState
 	{
 		private var _player:Player;
-		private var _level:Level;
+		private var _level:Area;
 		
 		public function GameState() 
 		{
-			_level = new Level();
+			_level = new Area();
 			_player = new Player();
 			_player.x = 200;
 			_player.y = 200;

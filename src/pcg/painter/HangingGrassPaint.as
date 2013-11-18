@@ -1,7 +1,7 @@
 package pcg.painter 
 {
 	import pcg.ArrayMap;
-	import pcg.Level;
+	import pcg.Area;
 	/**
 	 * ...
 	 * @author Bas Roding
@@ -17,8 +17,8 @@ package pcg.painter
 		
 		public function applyPaint(x:int, y:int, map:ArrayMap, originalTile:uint):int 
 		{
-			if (Level.isSolidTile(map.getTile(x, y - 1)) && !Level.isSolidTile(map.getTile(x, y + 1)) && !Level.isSolidTile(map.getTile(x, y)) && Math.random() * 100 <= _chance)
-				return Level.HANGING_GRASS;
+			if (Area.isSolidTile(map.getTile(x, y - 1)) && !Area.isSolidTile(map.getTile(x, y + 1)) && !Area.isSolidTile(map.getTile(x, y)) && Math.random() * 100 <= _chance)
+				return Area.HANGING_GRASS;
 			else
 				return originalTile;
 		}

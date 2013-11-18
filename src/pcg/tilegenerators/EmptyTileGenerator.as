@@ -1,6 +1,6 @@
 package pcg.tilegenerators 
 {
-	import pcg.Level;
+	import pcg.Area;
 	/**
 	 * ...
 	 * @author Bas Roding
@@ -10,7 +10,7 @@ package pcg.tilegenerators
 		
 		public function getTile(x:int, y:int, width:int, height:int):int
 		{
-			return Level.EMPTY;
+			return Area.EMPTY;
 		}
 		
 	}

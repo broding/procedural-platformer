@@ -1,7 +1,7 @@
 package pcg.automata 
 {
 	import pcg.ArrayMap;
-	import pcg.Level;
+	import pcg.Area;
 	/**
 	 * ...
 	 * @author Bas Roding
@@ -19,22 +19,22 @@ package pcg.automata
 		{
 			var rockNeighbours:int = 0;
 			
-			if (Level.isSolidTile(map.getTile(x - 1, y - 1))) rockNeighbours++;
-			if (Level.isSolidTile(map.getTile(x, y - 1))) rockNeighbours++;
-			if (Level.isSolidTile(map.getTile(x + 1, y - 1))) rockNeighbours++;
+			if (Area.isSolidTile(map.getTile(x - 1, y - 1))) rockNeighbours++;
+			if (Area.isSolidTile(map.getTile(x, y - 1))) rockNeighbours++;
+			if (Area.isSolidTile(map.getTile(x + 1, y - 1))) rockNeighbours++;
 			
 			
-			if (Level.isSolidTile(map.getTile(x - 1, y))) rockNeighbours++;
-			if (Level.isSolidTile(map.getTile(x + 1, y))) rockNeighbours++;
+			if (Area.isSolidTile(map.getTile(x - 1, y))) rockNeighbours++;
+			if (Area.isSolidTile(map.getTile(x + 1, y))) rockNeighbours++;
 			
-			if (Level.isSolidTile(map.getTile(x - 1, y + 1))) rockNeighbours++;
-			if (Level.isSolidTile(map.getTile(x, y + 1))) rockNeighbours++;
-			if (Level.isSolidTile(map.getTile(x + 1, y + 1))) rockNeighbours++;
+			if (Area.isSolidTile(map.getTile(x - 1, y + 1))) rockNeighbours++;
+			if (Area.isSolidTile(map.getTile(x, y + 1))) rockNeighbours++;
+			if (Area.isSolidTile(map.getTile(x + 1, y + 1))) rockNeighbours++;
 			
 			if (rockNeighbours >= this._neighboursNeeded)
-				return Level.MIDDLE_ROCK
+				return Area.MIDDLE_ROCK
 			else
-				return Level.EMPTY;
+				return Area.EMPTY;
 		}
 	}
 

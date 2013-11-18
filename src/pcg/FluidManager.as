@@ -45,7 +45,7 @@ package pcg
 			
 			var start:FlxPoint = new FlxPoint(Math.floor(Math.random() * map.width), Math.floor(Math.random() * map.height));
 			
-			while (Level.isSolidTile(map.getTile(start.x, start.y)))
+			while (Area.isSolidTile(map.getTile(start.x, start.y)))
 			{
 				start = new FlxPoint(Math.floor(Math.random() * map.width), Math.floor(Math.random() * map.height));
 			}
@@ -100,7 +100,7 @@ package pcg
 		
 		private function isValidTile(x:uint, y:uint):Boolean
 		{
-			if (Level.isSolidTile(_map.getTile(x / 16, y / 16)))
+			if (Area.isSolidTile(_map.getTile(x / 16, y / 16)))
 				return false;
 				
 			if (isWaterTile(x, y))
