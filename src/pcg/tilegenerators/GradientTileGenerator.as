@@ -9,7 +9,7 @@ package pcg.tilegenerators
 		
 		public function getTile(x:int, y:int, width:int, height:int):int 
 		{
-			return (y / 28) + (Math.random());
+			return (y / height) + (Math.random());
 		}
 		
 	}
