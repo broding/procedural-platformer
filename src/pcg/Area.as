@@ -59,9 +59,9 @@ package pcg
 			_map = new ArrayMap(new GradientTileGenerator(), _width, _height);
 			
 			var itterator:RuleItterator = new RuleItterator();
-			itterator.addRule(new NeighboursToRockRule(5));
+			itterator.addRule(new NeighboursToRockRule());
 			
-			_map = itterator.itterate(_map, 3);
+			_map = itterator.itterate(_map);
 			
 			_solidTilemap.loadMap(_map.toString(), _tilesetImage, 16, 16);
 			_decorationTilemap.loadMap(_map.toString(), _tilesetImage, 16, 16);
@@ -103,9 +103,9 @@ package pcg
 			if (FlxG.keys.justPressed("SPACE"))
 			{
 				var itterator:RuleItterator = new RuleItterator();
-				itterator.addRule(new NeighboursToRockRule(5));
+				itterator.addRule(new NeighboursToRockRule());
 			
-				_map = itterator.itterate(_map, 1);
+				_map = itterator.itterate(_map);
 				
 				var painter:Painter = new Painter();
 				painter.addPaint(new MiddleBlockPaint());

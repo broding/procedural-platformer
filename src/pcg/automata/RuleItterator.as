@@ -20,13 +20,13 @@ package pcg.automata
 			rules.push(rule);
 		}
 		
-		public function itterate(map:ArrayMap, itterations:int):ArrayMap
+		public function itterate(map:ArrayMap):ArrayMap
 		{
-			for (var i:int = 0; i < itterations; i++)
+			for (var j:int = 0; j < rules.length; j++)
 			{
 				var newMap:ArrayMap = this.setupArrayMap(map.width, map.height);
 				
-				for (var j:int = 0; j < rules.length; j++)
+				for (var i:int = 0; i < rules[j].getItterations(); i++)
 				{
 					for (var x:int = 0; x < map.width; x++)
 					{
@@ -35,11 +35,12 @@ package pcg.automata
 							newMap.setTile(rules[j].applyRule(x, y, map), x, y);
 						}
 					}
+					
+					map = newMap;
 				}
 				
-				map = newMap;
 			}
-			
+				
 			return map;
 		}
 		

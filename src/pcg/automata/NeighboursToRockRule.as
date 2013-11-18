@@ -1,21 +1,23 @@
 package pcg.automata 
 {
-	import pcg.ArrayMap;
 	import pcg.Area;
+	import pcg.ArrayMap;
 	/**
 	 * ...
 	 * @author Bas Roding
 	 */
 	public class NeighboursToRockRule implements Rule
 	{
-		private var _neighboursNeeded:int;
+		private var _neighboursNeeded:uint;
+		private var _itterations:uint;
 		
-		public function NeighboursToRockRule(neighboursNeeded:int = 5)
+		public function NeighboursToRockRule(itterations:uint = 1, neighboursNeeded:uint = 5)
 		{
+			this._itterations = itterations;
 			this._neighboursNeeded = neighboursNeeded;
 		}
 		
-		public function applyRule(x:int, y:int, map:ArrayMap):int
+		public function applyRule(x:int, y:int, map:ArrayMap):uint
 		{
 			var rockNeighbours:int = 0;
 			
@@ -35,6 +37,11 @@ package pcg.automata
 				return Area.MIDDLE_ROCK
 			else
 				return Area.EMPTY;
+		}
+		
+		public function getItterations():uint
+		{
+			return this._itterations;
 		}
 	}
 
