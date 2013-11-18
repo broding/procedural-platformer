@@ -1,6 +1,7 @@
 package pcg 
 {
 	import org.flixel.FlxG;
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxState;
 	
 	import pcg.areagenerator.AreaGenerator;
@@ -47,7 +48,7 @@ package pcg
 			
 			_player = new Player();
 			var spawnpoint:FlxPoint = new FlxPoint();
-			spawnpoint = _level.getPlayerSpawnPoint(40);
+			spawnpoint = _level.getPlayerSpawnPoint(3);
 			_player.x = spawnpoint.x;
 			_player.y = spawnpoint.y;
 			add(_player);

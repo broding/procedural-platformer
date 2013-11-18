@@ -1,7 +1,9 @@
 package pcg 
 {
+	import org.flixel.FlxBasic;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxText;
 	import org.flixel.FlxTilemap;
