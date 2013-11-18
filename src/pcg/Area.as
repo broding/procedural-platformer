@@ -170,6 +170,20 @@ package pcg
 				return false;
 		}
 		
+		public function getPlayerSpawnPoint(xpos:int):FlxPoint
+		{
+			var point:FlxPoint = new FlxPoint();
+			
+			//Boolean ==> Area.isSolidTile(_map.getTile(5, 7));
+			for (var i = 0; i < _map.height; i++) {
+				if (Area.isSolidTile(_map.getTile(xpos, i)) == false && Area.isSolidTile(_map.getTile(xpos, i + 1)) == true) {
+					point.x = 16 * xpos;
+					point.y = 16 * i;
+				}
+			}
+			return point; 
+		}
+		
 	}
 
 }

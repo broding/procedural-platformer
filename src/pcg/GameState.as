@@ -14,11 +14,13 @@ package pcg
 		public function GameState() 
 		{
 			_level = new Area();
-			_player = new Player();
-			_player.x = 200;
-			_player.y = 200;
-			
 			add(_level);
+			
+			_player = new Player();
+			var spawnpoint:FlxPoint = new FlxPoint();
+			spawnpoint = _level.getPlayerSpawnPoint(40);
+			_player.x = spawnpoint.x;
+			_player.y = spawnpoint.y;
 			add(_player);
 		}
 		
