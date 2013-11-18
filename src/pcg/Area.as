@@ -1,7 +1,11 @@
 package pcg 
 {
-	import org.flixel.*;
+	import org.flixel.FlxG;
+	import org.flixel.FlxGroup;
+	import org.flixel.FlxSprite;
+	import org.flixel.FlxText;
 	import org.flixel.FlxTilemap;
+	
 	import pcg.automata.NeighboursToRockRule;
 	import pcg.automata.RuleItterator;
 	import pcg.painter.BottomBlockPaint;
@@ -45,33 +49,45 @@ package pcg
 		
 		private var _debugText:FlxText;
 		
-		public function Area(width:uint = 48, height:uint = 28) 
+		public function Area(map:ArrayMap) 
 		{
-			this._width = width;
-			this._height = height;
+			this._width = map.width;
+			this._height = map.height;
+			this._map = map;
 			
 			addBackground();
 			
 			_fluidManager = new FluidManager();
 			_solidTilemap = new FlxTilemap();
-			_decorationTilemap = new FlxTilemap();
 			
-			_map = new ArrayMap(new GradientTileGenerator(), _width, _height);
-			
-			var itterator:RuleItterator = new RuleItterator();
-			itterator.addRule(new NeighboursToRockRule(5));
-			
-			_map = itterator.itterate(_map, 3);
+			var painter:Painter = new Painter();
+			painter.addPaint(new MiddleBlockPaint());
+			painter.addPaint(new BottomBlockPaint());
+			painter.addPaint(new TopBlockPaint());
+			painter.addPaint(new SingleBlockPaint());
+			_map = painter.paint(_map);
 			
 			_solidTilemap.loadMap(_map.toString(), _tilesetImage, 16, 16);
-			_decorationTilemap.loadMap(_map.toString(), _tilesetImage, 16, 16);
 			
 			_debugText = new FlxText(5, 5, 200, "");
 			
 			add(_solidTilemap);
-			add(_decorationTilemap);
 			add(_fluidManager);
 			add(_debugText);
+		}
+		
+		public function paint(painter:Painter):void
+		{
+			if(_decorationTilemap != null)
+				remove(_decorationTilemap, true);
+				
+			_decorationTilemap = new FlxTilemap();
+			
+			var decorationMap:ArrayMap = painter.paint(_map, true);
+			
+			_decorationTilemap.loadMap(decorationMap.toString(), _tilesetImage, 16, 16);
+			
+			add(_decorationTilemap);
 		}
 		
 		private function addBackground():void
@@ -93,53 +109,12 @@ package pcg
 		
 		private function initWater():void
 		{
-			
+			_fluidManager.init(_map);
 		}
 		
 		override public function update():void 
 		{
 			super.update();
-			
-			if (FlxG.keys.justPressed("SPACE"))
-			{
-				var itterator:RuleItterator = new RuleItterator();
-				itterator.addRule(new NeighboursToRockRule(5));
-			
-				_map = itterator.itterate(_map, 1);
-				
-				var painter:Painter = new Painter();
-				painter.addPaint(new MiddleBlockPaint());
-				painter.addPaint(new BottomBlockPaint());
-				painter.addPaint(new TopBlockPaint());
-				painter.addPaint(new SingleBlockPaint());
-				_map = painter.paint(_map);
-				
-				painter.clearPaints();
-				painter.addPaint(new HangingGrassPaint());
-				painter.addPaint(new RockFloorPaint());
-				var decorationMap:ArrayMap = painter.paint(_map, true);
-				
-				this.resetTilemap();
-				_solidTilemap.loadMap(_map.toString(), _tilesetImage, 16, 16);
-				_decorationTilemap.loadMap(decorationMap.toString(), _tilesetImage, 16, 16);
-				
-				_fluidManager.init(_map);
-			}
-			
-			if (FlxG.keys.justPressed("X"))
-			{
-				_map = new ArrayMap(new GradientTileGenerator(), 45, 28);
-				
-				var painter:Painter = new Painter();
-				painter.addPaint(new MiddleBlockPaint());
-				painter.addPaint(new BottomBlockPaint());
-				painter.addPaint(new TopBlockPaint());
-				painter.addPaint(new SingleBlockPaint());
-				_map = painter.paint(_map);
-				
-				resetTilemap();
-				_solidTilemap.loadMap(_map.toString(), _tilesetImage, 16, 16);
-			}
 			
 			_debugText.text = "Step time: " + _fluidManager.debugStepSpeed;
 		}

@@ -8,7 +8,8 @@ package pcg.automata
 	 */
 	public interface Rule 
 	{
-		function applyRule(x:int, y:int, map:ArrayMap):int
+		function applyRule(x:int, y:int, map:ArrayMap):uint;
+		function getItterations():uint;
 	}
 	
 }

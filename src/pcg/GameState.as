@@ -1,7 +1,14 @@
 package pcg 
 {
-	import org.flixel.FlxSprite;
-	import org.flixel.*;
+	import org.flixel.FlxG;
+	import org.flixel.FlxState;
+	
+	import pcg.areagenerator.AreaGenerator;
+	import pcg.areagenerator.DefaultAreaGenerator;
+	import pcg.painter.HangingGrassPaint;
+	import pcg.painter.Painter;
+	import pcg.painter.RockFloorPaint;
+
 	/**
 	 * ...
 	 * @author Bas Roding
@@ -13,7 +20,29 @@ package pcg
 		
 		public function GameState() 
 		{
-			_level = new Area();
+			this.initLevel();
+		}
+		
+		private function initLevel():void
+		{
+			if(_level != null)
+			{
+				remove(_level);
+				remove(_player);
+			}
+			
+			_player = new Player();
+			_player.x = 200;
+			_player.y = 200;
+			
+			var generator:AreaGenerator = new DefaultAreaGenerator();
+			
+			_level = generator.generateArea();
+			var painter:Painter = new Painter();
+			painter.addPaint(new HangingGrassPaint());
+			painter.addPaint(new RockFloorPaint());
+			_level.paint(painter);
+			
 			add(_level);
 			
 			_player = new Player();
@@ -29,6 +58,12 @@ package pcg
 			super.update();
 			
 			FlxG.collide(_player, _level.collideTilemap);
+			
+			if(FlxG.keys.justPressed("SPACE"))
+			{
+				initLevel();
+			}
+			
 		}
 		
 	}
