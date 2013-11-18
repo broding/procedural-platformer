@@ -5,6 +5,7 @@ package pcg.areagenerator
 	import pcg.automata.NeighboursToRockRule;
 	import pcg.automata.RuleItterator;
 	import pcg.tilegenerators.GradientTileGenerator;
+	import pcg.automata.BorderRocksRule;
 
 	public class DefaultAreaGenerator implements AreaGenerator
 	{
@@ -14,6 +15,7 @@ package pcg.areagenerator
 			
 			var itterator:RuleItterator = new RuleItterator();
 			itterator.addRule(new NeighboursToRockRule(3, 5));
+			itterator.addRule(new BorderRocksRule());
 			
 			map = itterator.itterate(map);
 			
