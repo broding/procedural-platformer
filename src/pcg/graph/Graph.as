@@ -7,6 +7,8 @@ package pcg.graph
 		
 		public function Graph()
 		{
+			_root = new Node();
+			_rules = new Array();
 		}
 		
 		public function toString():String
@@ -26,5 +28,16 @@ package pcg.graph
 				_root.executeRule(_rules[i]);
 			}
 		}
+
+		public function get root():Node
+		{
+			return _root;
+		}
+
+		public function set root(value:Node):void
+		{
+			_root = value;
+		}
+
 	}
 }

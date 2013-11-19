@@ -4,7 +4,14 @@ package pcg.graph
 	{
 		public const MAX_CONNECTIONS:uint = 3;
 		
+		public static const NORMAL:String = "NORMAL";
+		public static const BALLOON:String = "BALLOON";
+		public static const PIT:String = "PIT";
+		public static const BOMB:String = "BOMB";
+		public static const BREAKABLE:String = "BREAKABLE";
+		
 		private var _connections:Array;
+		private var _type:String;
 		
 		public function Node()
 		{
@@ -31,5 +38,16 @@ package pcg.graph
 		{
 			
 		}
+
+		public function get type():String
+		{
+			return _type;
+		}
+
+		public function set type(value:String):void
+		{
+			_type = value;
+		}
+
 	}
 }
