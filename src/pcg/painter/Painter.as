@@ -1,7 +1,10 @@
 package pcg.painter 
 {
+	import org.flixel.FlxRect;
+	
 	import pcg.ArrayMap;
 	import pcg.tilegenerators.EmptyTileGenerator;
+
 	/**
 	 * ...
 	 * @author Bas Roding
@@ -43,6 +46,22 @@ package pcg.painter
 			}
 			
 			return map;
+		}
+		
+		public function repaint(original:ArrayMap, rect:FlxRect):ArrayMap
+		{
+			for (var j:int = 0; j < paints.length; j++)
+			{
+				for (var x:int = rect.x; x < rect.width; x++)
+				{
+					for (var y:int = rect.y; y < rect.height; y++)
+					{
+						original.setTile(paints[j].applyPaint(x, y, original, original.getTile(x, y)), x, y);
+					}
+				}
+			}
+			
+			return original;
 		}
 		
 	}

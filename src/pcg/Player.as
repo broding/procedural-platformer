@@ -2,12 +2,15 @@ package pcg
 {
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
+	import org.flixel.FlxU;
+
 	/**
 	 * ...
 	 * @author Bas Roding
 	 */
-	public class Player extends FlxSprite
+	public class Player extends FlxSprite implements GameEventListener
 	{
 		private static const WALK_SPEED:uint = 70;
 		private static const JUMP_POWER:uint = 180;
@@ -39,36 +42,36 @@ package pcg
 			
 			checkAnimation();
 			
-			if (FlxG.keys.LEFT) 
-				velocity.x = -WALK_SPEED;
-			else if (FlxG.keys.RIGHT)
-				velocity.x = WALK_SPEED;
-			else
-				velocity.x = 0;
+			if(!flickering)
+			{
+				if (FlxG.keys.LEFT) 
+					velocity.x = -WALK_SPEED;
+				else if (FlxG.keys.RIGHT)
+					velocity.x = WALK_SPEED;
+				else 
+					velocity.x = 0;
+				if (FlxG.keys.B || FlxG.keys.UP)
+				{
+					jump();
+				}
 				
+				if(FlxG.keys.justPressed("X"))
+				{
+					dropBomb();
+				}
+			}
+			
 			if (this.justTouched(FLOOR))
 			{
 				_jumping = false;
 				play("jump_end");
 			}
 				
-			if (FlxG.keys.B || FlxG.keys.UP)
-			{
-				jump();
-			}
-			
-			if(FlxG.keys.justPressed("X"))
-			{
-				dropBomb();
-			}
-				
 			velocity.y += 10;
 		}
 		
 		private function dropBomb():void
-		{
-			trace("bomb");
-			
+		{	
 			var bomb:Bomb = new Bomb();
 			bomb.x = x;
 			bomb.y = y;
@@ -105,6 +108,21 @@ package pcg
 			return _bombs;
 		}
 
+		
+		public function receiveEvent(event:GameEvent):void
+		{
+			switch(event.type)
+			{
+				case GameEvent.EXPLOSION:
+					var position:FlxPoint = new FlxPoint(x,y);
+					var distance:Number = FlxU.getDistance(position, event.position);
+					if(distance < event.radius * 15)
+					{
+						this.flicker(1);
+						velocity = new FlxPoint((position.x - event.position.x) * 20, (position.y - event.position.y) * 20);
+					}
+			}
+		}
 		
 	}
 

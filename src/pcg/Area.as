@@ -1,29 +1,24 @@
 package pcg 
 {
 	import org.flixel.FlxBasic;
-	import org.flixel.FlxG;
-	import org.flixel.FlxGroup;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
+	import org.flixel.FlxRect;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxText;
 	import org.flixel.FlxTilemap;
 	
-	import pcg.automata.NeighboursToRockRule;
-	import pcg.automata.RuleItterator;
 	import pcg.painter.BottomBlockPaint;
-	import pcg.painter.HangingGrassPaint;
 	import pcg.painter.MiddleBlockPaint;
 	import pcg.painter.Painter;
-	import pcg.painter.RockFloorPaint;
 	import pcg.painter.SingleBlockPaint;
 	import pcg.painter.TopBlockPaint;
-	import pcg.tilegenerators.GradientTileGenerator;
-	import pcg.tilegenerators.SimpleTileGenerator;
+
 	/**
 	 * ...
 	 * @author Bas Roding
 	 */
-	public class Area extends FlxGroup
+	public class Area extends FlxBasic
 	{
 		[Embed(source = "../../assets/tileset.png")] private var _tilesetImage:Class;
 		[Embed(source = "../../assets/bg.png")] private var _bgImage:Class;
@@ -45,7 +40,7 @@ package pcg
 		
 		private var _map:ArrayMap;
 		private var _solidTilemap:FlxTilemap;
-		private var _decorationTilemap:FlxTilemap;
+		private var _decorationMap:ArrayMap;
 		
 		private var _fluidManager:FluidManager;
 		
@@ -76,23 +71,26 @@ package pcg
 			
 			_debugText = new FlxText(5, 5, 200, "");
 			
-			add(_solidTilemap);
-			add(_fluidManager);
-			add(_debugText);
+			initWater();
 		}
 		
+		public function get fluidManager():FluidManager
+		{
+			return _fluidManager;
+		}
+
 		public function paint(painter:Painter):void
 		{
-			if(_decorationTilemap != null)
-				remove(_decorationTilemap, true);
-				
 			_decorationTilemap = new FlxTilemap();
 			
-			var decorationMap:ArrayMap = painter.paint(_map, true);
+			_decorationMap = painter.paint(_map, true);
 			
-			_decorationTilemap.loadMap(decorationMap.toString(), _tilesetImage, 16, 16);
-			
-			add(_decorationTilemap);
+			_decorationTilemap.loadMap(_decorationMap.toString(), _tilesetImage, 16, 16);
+		}
+		
+		public function repaint(painter:Painter, rect:FlxRect):void
+		{
+			_decorationMap = painter.repaint(_decorationMap, rect);
 		}
 		
 		private function addBackground():void
@@ -108,20 +106,13 @@ package pcg
 				var sprite:FlxSprite = new FlxSprite((i % _width) * 32, y * 32, _bgImage);
 				sprite.alpha = 0.8;
 				
-				add(sprite);
+				//add(sprite);
 			}
 		}
 		
 		private function initWater():void
 		{
 			_fluidManager.init(_map);
-		}
-		
-		override public function update():void 
-		{
-			super.update();
-			
-			_debugText.text = "Step time: " + _fluidManager.debugStepSpeed;
 		}
 		
 		private function resetTilemap():void
@@ -155,12 +146,14 @@ package pcg
 			var point:FlxPoint = new FlxPoint();
 			
 			//Boolean ==> Area.isSolidTile(_map.getTile(5, 7));
-			for (var i = 0; i < _map.height; i++) {
+			for (var i:uint = 0; i < _map.height; i++) {
 				if (Area.isSolidTile(_map.getTile(xpos, i)) == false && Area.isSolidTile(_map.getTile(xpos, i + 1)) == true) {
 					point.x = 16 * xpos;
 					point.y = 16 * i;
+					return point; 
 				}
 			}
+			
 			return point; 
 		}
 
@@ -184,7 +177,45 @@ package pcg
 			_y = value;
 		}
 
+		public function get decorationTilemap():FlxTilemap
+		{
+			return _decorationTilemap;
+		}
 		
+		public function processExplosion(position:FlxPoint, radius:uint, modifiedTiles:Array = null):void
+		{
+			if(modifiedTiles == null)
+			{
+				var maxTiles:uint = _solidTilemap.widthInTiles * _solidTilemap.heightInTiles
+				modifiedTiles = new Array(maxTiles);
+				
+				for(var i:int = 0; i < maxTiles; i++)
+					modifiedTiles[i] = false;
+				
+			}
+			
+			var tileIndex:uint = position.y * _solidTilemap.widthInTiles + position.x;
+			
+			// early outs
+			if(radius == 0 || modifiedTiles[tileIndex] == true)
+				return;
+			
+			_solidTilemap.setTile(position.x, position.y, 0, true);
+			_decorationTilemap.setTile(position.x, position.y - 1, 0, true);
+			_decorationTilemap.setTile(position.x, position.y + 1, 0, true);
+			
+			modifiedTiles[tileIndex] = true;
+			
+			// down
+			processExplosion(new FlxPoint(position.x, position.y + 1), radius - 1, modifiedTiles);
+			// up
+			processExplosion(new FlxPoint(position.x, position.y - 1), radius - 1, modifiedTiles);
+			// left
+			processExplosion(new FlxPoint(position.x - 1, position.y), radius - 1, modifiedTiles);
+			// down
+			processExplosion(new FlxPoint(position.x + 1, position.y), radius - 1, modifiedTiles);
+			
+		}
 	}
 
 }
