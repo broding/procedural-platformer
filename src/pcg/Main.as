@@ -1,7 +1,5 @@
 package pcg
 {
-	import flash.display.Sprite;
-	import flash.events.Event;
 	import org.flixel.FlxGame;
 	
 	/**
@@ -12,7 +10,7 @@ package pcg
 	{
 		public function Main():void 
 		{
-			super(720, 480 - 32, GameState, 2, 60, 60);
+			super(1720, 1480 - 32, GameState, 0.5, 60, 60);
 		}
 		
 	}

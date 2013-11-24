@@ -2,7 +2,7 @@ package pcg.painter
 {
 	import org.flixel.FlxRect;
 	
-	import pcg.ArrayMap;
+	import pcg.Area;
 	import pcg.tilegenerators.EmptyTileGenerator;
 
 	/**
@@ -30,9 +30,9 @@ package pcg.painter
 			paints = new Vector.<Paint>();
 		}
 		
-		public function paint(referenceMap:ArrayMap, cleanMap:Boolean = false):ArrayMap
+		public function paint(referenceMap:Area, cleanMap:Boolean = false):Area
 		{
-			var map:ArrayMap = cleanMap ? new ArrayMap(new EmptyTileGenerator(), referenceMap.width, referenceMap.height) : referenceMap;
+			var map:Area = cleanMap ? new Area(new EmptyTileGenerator(), referenceMap.width, referenceMap.height) : referenceMap;
 			
 			for (var j:int = 0; j < paints.length; j++)
 			{
@@ -48,7 +48,7 @@ package pcg.painter
 			return map;
 		}
 		
-		public function repaint(original:ArrayMap, rect:FlxRect):ArrayMap
+		public function repaint(original:Area, rect:FlxRect):Area
 		{
 			for (var j:int = 0; j < paints.length; j++)
 			{

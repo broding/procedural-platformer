@@ -3,8 +3,11 @@ package pcg
 	import org.flixel.FlxEmitter;
 	import org.flixel.FlxG;
 	import org.flixel.FlxParticle;
-	import org.flixel.FlxPoint;
 	import org.flixel.FlxState;
+	
+	import pcg.graph.Graph;
+	import pcg.levelgenerator.DefaultLevelGenerator;
+	import pcg.levelgenerator.RandomLevelGenerator;
 
 	/**
 	 * ...
@@ -37,10 +40,10 @@ package pcg
 		}
 		
 		private function initLevel():void
-		{
+		{	
 			if(_level != null)
 			{
-				remove(_level.collideMaps);
+				remove(_level.collideMap);
 				remove(_level.decorationMaps);
 				remove(_player);
 				remove(_player.bombs);
@@ -48,15 +51,14 @@ package pcg
 			}
 			
 			_player = new Player();
-			_level = new Level();
+			_level = new Level(Graph.generateGraph(), new DefaultLevelGenerator());
 			
-			var spawnpoint:FlxPoint = _level.getBeginArea().getPlayerSpawnPoint(3);
-			_player.x = spawnpoint.x;
-			_player.y = spawnpoint.y;
+			//var spawnpoint:FlxPoint = _level.getBeginArea().getPlayerSpawnPoint(3);
+			//_player.x = spawnpoint.x;
+			//_player.y = spawnpoint.y;
 			
-			add(_level.collideMaps);
+			add(_level.collideMap);
 			add(_level.decorationMaps);
-			add(_level.getBeginArea().fluidManager);
 			add(_player);
 			add(_player.bombs);
 			
@@ -68,9 +70,9 @@ package pcg
 		{
 			super.update();
 			
-			FlxG.collide(_player, _level.collideMaps);
-			FlxG.collide(_player.bombs, _level.collideMaps);
-			FlxG.collide(_emitter, _level.collideMaps);
+			FlxG.collide(_player, _level.collideMap);
+			FlxG.collide(_player.bombs, _level.collideMap);
+			FlxG.collide(_emitter, _level.collideMap);
 			
 			if(FlxG.keys.justPressed("SPACE"))
 			{

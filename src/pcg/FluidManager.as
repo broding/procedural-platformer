@@ -9,7 +9,7 @@ package pcg
 	{
 		public var stepSpeed:Number;
 		private var _stepTimer:Number;
-		private var _map:ArrayMap;
+		private var _map:Area;
 		private var _newFluids:Array = new Array();
 		private var _removeFluids:Array = new Array();
 		
@@ -39,7 +39,7 @@ package pcg
 			}
 		}
 		
-		public function init(map:ArrayMap):void
+		public function init(map:Area):void
 		{
 			_map = map;
 			

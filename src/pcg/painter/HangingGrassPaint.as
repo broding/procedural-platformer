@@ -1,6 +1,6 @@
 package pcg.painter 
 {
-	import pcg.ArrayMap;
+	import pcg.Area;
 	import pcg.Area;
 	/**
 	 * ...
@@ -15,7 +15,7 @@ package pcg.painter
 			this._chance = chance;
 		}
 		
-		public function applyPaint(x:int, y:int, map:ArrayMap, originalTile:uint):int 
+		public function applyPaint(x:int, y:int, map:pcg.Area, originalTile:uint):int 
 		{
 			if (Area.isSolidTile(map.getTile(x, y - 1)) && !Area.isSolidTile(map.getTile(x, y + 1)) && !Area.isSolidTile(map.getTile(x, y)) && Math.random() * 100 <= _chance)
 				return Area.HANGING_GRASS;

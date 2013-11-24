@@ -1,6 +1,6 @@
-package pcg.automata 
+package pcg.arearules 
 {
-	import pcg.ArrayMap;
+	import pcg.Area;
 	import pcg.tilegenerators.EmptyTileGenerator;
 	/**
 	 * ...
@@ -8,23 +8,23 @@ package pcg.automata
 	 */
 	public class RuleItterator 
 	{
-		private var rules:Vector.<Rule>;
+		private var rules:Vector.<AreaRule>;
 		
 		public function RuleItterator() 
 		{
-			rules = new Vector.<Rule>();
+			rules = new Vector.<AreaRule>();
 		}
 		
-		public function addRule(rule:Rule):void
+		public function addRule(rule:AreaRule):void
 		{
 			rules.push(rule);
 		}
 		
-		public function itterate(map:ArrayMap):ArrayMap
+		public function itterate(map:Area):Area
 		{
 			for (var j:int = 0; j < rules.length; j++)
 			{
-				var newMap:ArrayMap = this.setupArrayMap(map.width, map.height);
+				var newMap:Area = this.setupArrayMap(map.width, map.height);
 				
 				for (var i:int = 0; i < rules[j].getItterations(); i++)
 				{
@@ -44,9 +44,9 @@ package pcg.automata
 			return map;
 		}
 		
-		private function setupArrayMap(width:int, height:int):ArrayMap
+		private function setupArrayMap(width:int, height:int):Area
 		{
-			return new ArrayMap(new EmptyTileGenerator(), width, height);
+			return new Area(new EmptyTileGenerator(), width, height);
 		}
 	}
 

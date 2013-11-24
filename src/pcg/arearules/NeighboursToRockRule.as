@@ -1,12 +1,11 @@
-package pcg.automata 
+package pcg.arearules 
 {
 	import pcg.Area;
-	import pcg.ArrayMap;
 	/**
 	 * ...
 	 * @author Bas Roding
 	 */
-	public class NeighboursToRockRule implements Rule
+	public class NeighboursToRockRule implements AreaRule
 	{
 		private var _neighboursNeeded:uint;
 		private var _itterations:uint;
@@ -17,7 +16,7 @@ package pcg.automata
 			this._neighboursNeeded = neighboursNeeded;
 		}
 		
-		public function applyRule(x:int, y:int, map:ArrayMap):uint
+		public function applyRule(x:int, y:int, map:Area):uint
 		{
 			var rockNeighbours:int = 0;
 			
