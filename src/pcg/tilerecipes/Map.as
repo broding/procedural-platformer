@@ -7,6 +7,8 @@ package pcg.tilerecipes
 	public class Map 
 	{
 		var recipes:Array;
+		var height:uint;
+		var width:uint;
 		
 		public function Map() 
 		{
