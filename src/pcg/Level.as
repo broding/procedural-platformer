@@ -3,6 +3,8 @@ package pcg
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
+	import pcg.tilerecipes.Map;
+	import pcg.tilerecipes.TileRecipe;
 	
 	import pcg.graph.Graph;
 	import pcg.levelgenerator.LevelGenerator;
@@ -37,10 +39,16 @@ package pcg
 			
 			_areas = _levelGenerator.generateLevelFromGraph(_graph);
 			
+			var map:Map = new Map();
+			var startRecipe = new TileRecipe("Start", TileRecipe.BOTTOM + TileRecipe.RIGHT);
+			map.addRecipe(startRecipe, 0, 0);
+			
+			/*
 			for each(var area:Area in _areas)
 			{
 				addArea(area);
 			}
+			*/
 			
 			/*
 			var painter:Painter = new Painter();
