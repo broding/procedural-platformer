@@ -51,7 +51,7 @@ package pcg
 			}
 			
 			_player = new Player();
-			_level = new Level(Graph.generateGraph(), new DefaultLevelGenerator());
+			_level = new Level(Graph.generateGraph(), new RandomLevelGenerator());
 			
 			//var spawnpoint:FlxPoint = _level.getBeginArea().getPlayerSpawnPoint(3);
 			//_player.x = spawnpoint.x;

@@ -42,7 +42,7 @@ package pcg.levelgenerator
 					
 					if(usedAreas[newX * parentArea.y] != null)
 					{
-						newX = parentArea.x (30 * -leftright);
+						newX = parentArea.x + (30 * -leftright);
 						
 						if(usedAreas[newX * parentArea.y] != null)
 						{
