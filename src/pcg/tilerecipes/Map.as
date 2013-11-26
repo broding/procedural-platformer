@@ -6,26 +6,26 @@ package pcg.tilerecipes
 	 */
 	public class Map 
 	{
-		var recipes:Array;
-		var height:uint;
-		var width:uint;
+		private var _recipes:Array;
+		private var _height:uint;
+		private var _width:uint;
 		
-		public function Map() 
+		public function Map(width:uint, height:uint) 
 		{
-			recipes = new Array();
-			for (var i = 0; i < 5; i++)
+			this._width = width;
+			this._height = height;
+			
+			_recipes = new Array();
+			for (var i:int = 0; i < 5; i++)
 			{
-				recipes[i] = new Array();
+				_recipes[i] = new Array();
 			}
 		}
 		
-		public function addRecipe(recipe:TileRecipe, x:uint, y:uint) 
+		public function addRecipe(recipe:TileRecipe, x:uint, y:uint):void
 		{
-			recipes[x][y] = recipe;
+			_recipes[x][y] = recipe;
 		}
-		
-		
-		
 	}
 
 }

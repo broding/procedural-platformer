@@ -3,12 +3,12 @@ package pcg
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
-	import pcg.tilerecipes.Map;
-	import pcg.tilerecipes.TileRecipe;
 	
 	import pcg.graph.Graph;
 	import pcg.levelgenerator.LevelGenerator;
 	import pcg.tilegenerators.EmptyTileGenerator;
+	import pcg.tilerecipes.Map;
+	import pcg.tilerecipes.TileRecipe;
 
 	public class Level implements GameEventListener
 	{	
@@ -39,8 +39,8 @@ package pcg
 			
 			_areas = _levelGenerator.generateLevelFromGraph(_graph);
 			
-			var map:Map = new Map();
-			var startRecipe = new TileRecipe("Start", TileRecipe.BOTTOM + TileRecipe.RIGHT);
+			var map:Map = new Map(5,5);
+			var startRecipe:TileRecipe = new TileRecipe("Start", TileRecipe.BOTTOM + TileRecipe.RIGHT);
 			map.addRecipe(startRecipe, 0, 0);
 			
 			/*
