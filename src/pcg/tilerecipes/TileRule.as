@@ -9,21 +9,24 @@ package pcg.tilerecipes
 	 */
 	public class TileRule 
 	{
-		var patternMap:Map;
-		var resultMap:Map;
+		private var _patternMap:Map;
+		private var _resultMap:Map;
 		
 		public function TileRule(patternMap:Map, resultMap:Map)
 		{
-			this.patternMap = patternMap;
-			this.resultMap = resultMap;
+			this._patternMap = patternMap;
+			this._resultMap = resultMap;
 			
 		}
 		
 		public function applyRule(map:Map):Boolean
 		{
-			for (var i = 0; i < 5; i++) {
+			for (var i = 0; i < 5; i++) 
+			{
 				
 			}
+			
+			return false;
 		}
 	}
 	

@@ -11,13 +11,13 @@ package pcg.tilerecipes
 		public static const RIGHT:int = 2;
 		public static const BOTTOM:int = 4;
 		
-		var name:String;
-		var sideValue:int;
+		private var _name:String;
+		private var _sides:int;
 		
 		public function TileRecipe(name:String, sideValue:int = 15) 
 		{
-			this.name = name;
-			this.sideValue = sideValue;
+			this._name = name;
+			this._sides = sideValue;
 		}
 		
 	}
