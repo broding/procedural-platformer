@@ -1,14 +1,20 @@
 package pcg
-{
+{	
+	import com.greensock.events.LoaderEvent;
+	import com.greensock.loading.DataLoader;
+	import com.greensock.loading.LoaderMax;
+	
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
 	
+	import pcg.arearecipes.StartAreaRecipe;
 	import pcg.graph.Graph;
 	import pcg.levelgenerator.LevelGenerator;
 	import pcg.tilegenerators.EmptyTileGenerator;
 	import pcg.tilerecipes.Map;
 	import pcg.tilerecipes.TileRecipe;
+	import pcg.tilerecipes.TileRecipes;
 
 	public class Level implements GameEventListener
 	{	
@@ -17,6 +23,7 @@ package pcg
 		
 		private var _areaSize:FlxPoint;
 		
+		private var _recipesLibrary:TileRecipes;
 		private var _graph:Graph;
 		private var _levelGenerator:LevelGenerator;
 		private var _areas:Vector.<Area>;
@@ -26,6 +33,11 @@ package pcg
 		
 		public function Level(graph:Graph, levelGenerator:LevelGenerator)
 		{
+			_recipesLibrary = new TileRecipes(function():void
+			{
+				loadRules(["start"]);
+			});
+			
 			_areaSize = new FlxPoint(30, 20);
 			_graph = graph;
 			_levelGenerator = levelGenerator;
@@ -40,8 +52,8 @@ package pcg
 			_areas = _levelGenerator.generateLevelFromGraph(_graph);
 			
 			var map:Map = new Map(5,5);
-			var startRecipe:TileRecipe = new TileRecipe("Start", TileRecipe.BOTTOM + TileRecipe.RIGHT);
-			map.addRecipe(startRecipe, 0, 0);
+			var startRecipe:TileRecipe = new TileRecipe("S", new StartAreaRecipe(), TileRecipe.BOTTOM + TileRecipe.RIGHT);
+			map.setRecipe(startRecipe, 0, 0);
 			
 			/*
 			for each(var area:Area in _areas)
@@ -56,6 +68,49 @@ package pcg
 			painter.addPaint(new RockFloorPaint());
 			// paint area
 			*/
+		}
+		
+		private function loadRules(ruleNames:Array):void
+		{
+			var queue:LoaderMax = new LoaderMax({name:"ruleQueue", onProgress:progressHandler, onComplete:completeHandler, onError:errorHandler});
+
+			for(var i:int = 0; i < ruleNames.length; i++)
+			{
+				queue.append( new com.greensock.loading.DataLoader("../assets/tilerules/" + ruleNames[i] + ".csv", {name:ruleNames[i]}));
+			}
+			
+			queue.load();
+			
+			function progressHandler(event:LoaderEvent):void
+			{
+				trace("progress: " + event.target.progress);
+			}
+			
+			function completeHandler(event:LoaderEvent):void 
+			{
+				for each(var ruleName:String in ruleNames)
+					addRule(LoaderMax.getContent(ruleName));
+			}
+			
+			function errorHandler(event:LoaderEvent):void
+			{
+				trace("error occured with " + event.target + ": " + event.text);
+			}
+		}
+		
+		private function addRule(csv:String):void
+		{
+			var split:Array = csv.split("\n\n");
+			
+			var patternCsv:String = split[1];
+			var resultCsv:String = split[2];
+			var width:int = split[1].split("\n")[0].split(",").length;
+			var height:int = split[1].split("\n").length;
+			
+			var pattern:Map = new Map(width, height);
+			var result:Map = new Map(width, height);
+			
+			pattern.loadFromCSV(patternCsv, _recipesLibrary);
 		}
 		
 		private function addArea(area:Area):void
