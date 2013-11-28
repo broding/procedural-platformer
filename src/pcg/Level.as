@@ -19,7 +19,7 @@ package pcg
 
 	public class Level implements GameEventListener
 	{	
-		[Embed(source = "../../assets/tileset.png")] private var _tilesetImage:Class;
+		[Embed(source = "../../assets/tileset2.png")] private var _tilesetImage:Class;
 		[Embed(source = "../../assets/bg.png")] private var _bgImage:Class;
 		
 		private var _areaSize:FlxPoint;
@@ -58,6 +58,30 @@ package pcg
 			{
 				loadRules(["start", "addDefault", "addDefault2", "twister"]);
 			});
+		}
+		
+		private function paint():void
+		{
+			for (var x:int = 0; x < _collideMap.widthInTiles; x++)
+			{
+				for (var y:int = 0; y < _collideMap.heightInTiles; y++)
+				{
+					var map:FlxTilemap = _collideMap;
+					
+					if(map.getTile(x, y) == 0)
+						continue;
+					
+					var sides:int = 
+						(map.getTile(x-1, y) != 0 ? 8 : 0) +
+						(map.getTile(x, y-1) != 0 ? 1 : 0) +
+						(map.getTile(x+1, y) != 0 ? 2 : 0) +
+						(map.getTile(x, y+1) != 0 ? 4 : 0);
+					
+					trace(sides);
+					_collideMap.setTile(x, y, sides);
+					
+				}
+			}
 		}
 		
 		private function applyRules():void
@@ -121,6 +145,8 @@ package pcg
 					addArea(area);
 				}
 			}
+			
+			paint();
 		}
 		
 		private function addArea(area:Area):void

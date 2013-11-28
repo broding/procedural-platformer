@@ -1,6 +1,7 @@
 package pcg.painter 
 {
 	import org.flixel.FlxRect;
+	import org.flixel.FlxTilemap;
 	
 	import pcg.Area;
 	import pcg.tilegenerators.EmptyTileGenerator;
@@ -30,22 +31,23 @@ package pcg.painter
 			paints = new Vector.<Paint>();
 		}
 		
-		public function paint(referenceMap:Area, cleanMap:Boolean = false):Area
-		{
-			var map:Area = cleanMap ? new Area(new EmptyTileGenerator(), referenceMap.width, referenceMap.height) : referenceMap;
-			
+		public function paint(tilemap:FlxTilemap, cleanMap:Boolean = false):FlxTilemap
+		{	
 			for (var j:int = 0; j < paints.length; j++)
 			{
-				for (var x:int = 0; x < referenceMap.width; x++)
+				for (var x:int = 0; x < tilemap.widthInTiles; x++)
 				{
-					for (var y:int = 0; y < referenceMap.height; y++)
+					for (var y:int = 0; y < tilemap.heightInTiles; y++)
 					{
-						map.setTile(paints[j].applyPaint(x, y, referenceMap, map.getTile(x, y)), x, y);
+						tilemap.setTile(paints[j].applyPaint(x, y, tilemap, tilemap.getTile(x, y)), x, y);
+						trace('busy');
 					}
 				}
 			}
 			
-			return map;
+			trace('done');
+			
+			return tilemap;
 		}
 		
 		public function repaint(original:Area, rect:FlxRect):Area
