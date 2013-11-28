@@ -1,5 +1,7 @@
 package pcg.tilerecipes 
 {
+	import pcg.arearecipes.EmptyAreaRecipe;
+
 	/**
 	 * ...
 	 * @author ...
@@ -18,9 +20,13 @@ package pcg.tilerecipes
 			this._height = height;
 			
 			_recipes = new Array();
-			for (var i:int = 0; i < 5; i++)
+			for (var x:int = 0; x < this._width; x++)
 			{
-				_recipes[i] = new Array();
+				_recipes[x] = new Array();
+				for(var y:int = 0; y < this._height; y++)
+				{
+					_recipes[x][y] = new TileRecipe("E", new EmptyAreaRecipe());
+				}
 			}
 		}
 		
@@ -32,7 +38,7 @@ package pcg.tilerecipes
 			{
 				var values:Array = lines[y].split(",");
 				
-				for(var x:int = 0; y < values.length; x++)
+				for(var x:int = 0; x < values.length; x++)
 				{
 					setRecipe(recipeLibrary.getRecipe(values[x]), x, y);
 				}
@@ -49,7 +55,10 @@ package pcg.tilerecipes
 		
 		public function getRecipe(x:uint, y:uint):TileRecipe
 		{
-			return _recipes[x][y];
+			if(_recipes[x][y] == null)
+				throw new Error("Could not find recipe");
+			else
+				return _recipes[x][y];
 		}
 
 		public function get height():uint

@@ -15,6 +15,7 @@ package pcg
 	import pcg.tilerecipes.Map;
 	import pcg.tilerecipes.TileRecipe;
 	import pcg.tilerecipes.TileRecipes;
+	import pcg.tilerecipes.TileRule;
 
 	public class Level implements GameEventListener
 	{	
@@ -23,6 +24,8 @@ package pcg
 		
 		private var _areaSize:FlxPoint;
 		
+		private var _map:Map;
+		private var _rules:Array;
 		private var _recipesLibrary:TileRecipes;
 		private var _graph:Graph;
 		private var _levelGenerator:LevelGenerator;
@@ -33,14 +36,11 @@ package pcg
 		
 		public function Level(graph:Graph, levelGenerator:LevelGenerator)
 		{
-			_recipesLibrary = new TileRecipes(function():void
-			{
-				loadRules(["start"]);
-			});
 			
 			_areaSize = new FlxPoint(30, 20);
 			_graph = graph;
 			_levelGenerator = levelGenerator;
+			_rules = new Array();
 			
 			_collideMap = new FlxTilemap();
 			var emptyArea:Area = new Area(new EmptyTileGenerator(), 400, 400);
@@ -51,9 +51,14 @@ package pcg
 			
 			_areas = _levelGenerator.generateLevelFromGraph(_graph);
 			
-			var map:Map = new Map(5,5);
+			_map = new Map(5,5);
 			var startRecipe:TileRecipe = new TileRecipe("S", new StartAreaRecipe(), TileRecipe.BOTTOM + TileRecipe.RIGHT);
-			map.setRecipe(startRecipe, 0, 0);
+			_map.setRecipe(startRecipe, 0, 0);
+			
+			_recipesLibrary = new TileRecipes(function():void
+			{
+				loadRules(["start", "addDefault"]);
+			});
 			
 			/*
 			for each(var area:Area in _areas)
@@ -68,6 +73,14 @@ package pcg
 			painter.addPaint(new RockFloorPaint());
 			// paint area
 			*/
+		}
+		
+		private function applyRules():void
+		{	
+			for(var i:int = 0; i < 5; i++)
+			{
+				(_rules[Math.floor(Math.random() * _rules.length)] as TileRule).applyRule(_map);
+			}
 		}
 		
 		private function loadRules(ruleNames:Array):void
@@ -90,6 +103,9 @@ package pcg
 			{
 				for each(var ruleName:String in ruleNames)
 					addRule(LoaderMax.getContent(ruleName));
+					
+				applyRules();
+				loadMap();
 			}
 			
 			function errorHandler(event:LoaderEvent):void
@@ -111,6 +127,27 @@ package pcg
 			var result:Map = new Map(width, height);
 			
 			pattern.loadFromCSV(patternCsv, _recipesLibrary);
+			result.loadFromCSV(resultCsv, _recipesLibrary);
+			
+			var rule:TileRule = new TileRule(pattern, result);
+			
+			_rules.push(rule);
+		}
+		
+		private function loadMap():void
+		{
+			for(var x:int = 0; x < _map.width; x++)
+			{
+				for(var y:int = 0; y < _map.height; y++)
+				{
+					var tileRecipe:TileRecipe = _map.getRecipe(x, y);
+					var area:Area = tileRecipe.areaRecipe.generateArea();
+					area.x = x * 30;
+					area.y = y * 20;
+					
+					addArea(area);
+				}
+			}
 		}
 		
 		private function addArea(area:Area):void
