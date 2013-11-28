@@ -4,9 +4,12 @@ package pcg.tilerecipes
 	import com.greensock.loading.DataLoader;
 	import com.greensock.loading.LoaderMax;
 	
-	import pcg.arearecipes.*;
-	
 	import flash.utils.getDefinitionByName;
+	
+	import pcg.arearecipes.DefaultAreaRecipe;
+	import pcg.arearecipes.EmptyAreaRecipe;
+	import pcg.arearecipes.GoalAreaRecipe;
+	import pcg.arearecipes.StartAreaRecipe;
 
 	public class TileRecipes
 	{
@@ -56,7 +59,7 @@ package pcg.tilerecipes
 			for each(var recipe:TileRecipe in _recipes)
 			{
 				if(recipe.name == name)
-					return recipe;
+					return new TileRecipe(recipe.name, recipe.areaRecipe);
 			}
 			
 			throw new Error("Could not found recipe");

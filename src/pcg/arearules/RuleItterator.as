@@ -2,6 +2,8 @@ package pcg.arearules
 {
 	import pcg.Area;
 	import pcg.tilegenerators.EmptyTileGenerator;
+	import pcg.Edge;
+
 	/**
 	 * ...
 	 * @author Bas Roding
@@ -24,7 +26,7 @@ package pcg.arearules
 		{
 			for (var j:int = 0; j < rules.length; j++)
 			{
-				var newMap:Area = this.setupArrayMap(map.width, map.height);
+				var newMap:Area = new Area(new EmptyTileGenerator(), map.width, map.height, map.edges);
 				
 				for (var i:int = 0; i < rules[j].getItterations(); i++)
 				{
@@ -42,11 +44,6 @@ package pcg.arearules
 			}
 				
 			return map;
-		}
-		
-		private function setupArrayMap(width:int, height:int):Area
-		{
-			return new Area(new EmptyTileGenerator(), width, height);
 		}
 	}
 

@@ -27,15 +27,17 @@ package pcg
 		private var _y:int;
 		private var _width:uint;
 		private var _height:uint;
+		private var _edges:Edge;
 		private var _map:Array;
 		
-		public function Area(generator:TileGenerator, width:uint, height:uint) 
+		public function Area(generator:TileGenerator, width:uint, height:uint, edges:Edge) 
 		{
 			_x = 0;
 			_y = 0;
 			_width = width;
 			_height = height;
 			_map = new Array();
+			_edges = edges;
 			
 			for (var y:int = 0; y < height; y++)
 			{
@@ -117,6 +119,12 @@ package pcg
 			else 
 				return false;
 		}
+
+		public function get edges():Edge
+		{
+			return _edges;
+		}
+
 	}
 
 }

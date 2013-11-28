@@ -36,14 +36,13 @@ package pcg
 		
 		public function Level(graph:Graph, levelGenerator:LevelGenerator)
 		{
-			
 			_areaSize = new FlxPoint(30, 20);
 			_graph = graph;
 			_levelGenerator = levelGenerator;
 			_rules = new Array();
 			
 			_collideMap = new FlxTilemap();
-			var emptyArea:Area = new Area(new EmptyTileGenerator(), 400, 400);
+			var emptyArea:Area = new Area(new EmptyTileGenerator(), 400, 400, new Edge());
 			_collideMap.loadMap(emptyArea.toString(), _tilesetImage, 16, 16);
 			
 			_collideMaps = new FlxGroup();
@@ -52,32 +51,18 @@ package pcg
 			_areas = _levelGenerator.generateLevelFromGraph(_graph);
 			
 			_map = new Map(5,5);
-			var startRecipe:TileRecipe = new TileRecipe("S", new StartAreaRecipe(), TileRecipe.BOTTOM + TileRecipe.RIGHT);
+			var startRecipe:TileRecipe = new TileRecipe("S", new StartAreaRecipe(), TileRecipe.RIGHT);
 			_map.setRecipe(startRecipe, 0, 0);
 			
 			_recipesLibrary = new TileRecipes(function():void
 			{
-				loadRules(["start", "addDefault"]);
+				loadRules(["start", "addDefault", "addDefault2", "twister"]);
 			});
-			
-			/*
-			for each(var area:Area in _areas)
-			{
-				addArea(area);
-			}
-			*/
-			
-			/*
-			var painter:Painter = new Painter();
-			painter.addPaint(new HangingGrassPaint());
-			painter.addPaint(new RockFloorPaint());
-			// paint area
-			*/
 		}
 		
 		private function applyRules():void
 		{	
-			for(var i:int = 0; i < 5; i++)
+			for(var i:int = 0; i < 35; i++)
 			{
 				(_rules[Math.floor(Math.random() * _rules.length)] as TileRule).applyRule(_map);
 			}
@@ -85,19 +70,12 @@ package pcg
 		
 		private function loadRules(ruleNames:Array):void
 		{
-			var queue:LoaderMax = new LoaderMax({name:"ruleQueue", onProgress:progressHandler, onComplete:completeHandler, onError:errorHandler});
+			var queue:LoaderMax = new LoaderMax({name:"ruleQueue", onComplete:completeHandler});
 
 			for(var i:int = 0; i < ruleNames.length; i++)
-			{
 				queue.append( new com.greensock.loading.DataLoader("../assets/tilerules/" + ruleNames[i] + ".csv", {name:ruleNames[i]}));
-			}
 			
 			queue.load();
-			
-			function progressHandler(event:LoaderEvent):void
-			{
-				trace("progress: " + event.target.progress);
-			}
 			
 			function completeHandler(event:LoaderEvent):void 
 			{
@@ -106,11 +84,6 @@ package pcg
 					
 				applyRules();
 				loadMap();
-			}
-			
-			function errorHandler(event:LoaderEvent):void
-			{
-				trace("error occured with " + event.target + ": " + event.text);
 			}
 		}
 		
@@ -141,7 +114,7 @@ package pcg
 				for(var y:int = 0; y < _map.height; y++)
 				{
 					var tileRecipe:TileRecipe = _map.getRecipe(x, y);
-					var area:Area = tileRecipe.areaRecipe.generateArea();
+					var area:Area = tileRecipe.areaRecipe.generateArea(tileRecipe.edges);
 					area.x = x * 30;
 					area.y = y * 20;
 					
@@ -159,9 +132,6 @@ package pcg
 					_collideMap.setTile(x, y, area.getTile(x - area.x, y - area.y), true);
 				}
 			}
-			
-			//_collideMaps.add(area.collideTilemap);
-			//_decorationMaps.add(area.decorationTilemap);
 		}
 		
 		private function processExplosion(position:FlxPoint, radius:uint):void

@@ -8,6 +8,8 @@ package pcg
 	import pcg.graph.Graph;
 	import pcg.levelgenerator.DefaultLevelGenerator;
 	import pcg.levelgenerator.RandomLevelGenerator;
+	import org.flixel.FlxRect;
+	import org.flixel.FlxPoint;
 
 	/**
 	 * ...
@@ -23,8 +25,15 @@ package pcg
 		
 		public function GameState() 
 		{
+		}
+		
+		override public function create():void
+		{
+			super.create();
+			
+			FlxG.worldBounds = new FlxRect(0, 0, 30 * 16 * 5, 20 * 16 * 5);
 			Game.emitEventCallback = emitGameEvent;
-			_gameEventListeners = new Array();
+			_gameEventListeners = new Array(); 
 			
 			_emitter = new FlxEmitter(0, 0, 100);
 			_emitter.gravity = 500;
@@ -51,6 +60,8 @@ package pcg
 			}
 			
 			_player = new Player();
+			_player.x = 300;
+			_player.y = 100;
 			_level = new Level(Graph.generateGraph(), new RandomLevelGenerator());
 			
 			//var spawnpoint:FlxPoint = _level.getBeginArea().getPlayerSpawnPoint(3);
@@ -74,10 +85,18 @@ package pcg
 			FlxG.collide(_player.bombs, _level.collideMap);
 			FlxG.collide(_emitter, _level.collideMap);
 			
+			if(FlxG.camera.zoom == 2)
+			{
+				FlxG.camera.follow(_player);
+			}
+			
 			if(FlxG.keys.justPressed("SPACE"))
 			{
 				initLevel();
 			}
+			
+			if(FlxG.keys.justPressed("P"))
+				FlxG.camera.zoom = FlxG.camera.zoom == 2 ? 0.3 : 2;
 			
 		}
 		

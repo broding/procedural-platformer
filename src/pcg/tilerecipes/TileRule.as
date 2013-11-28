@@ -48,7 +48,13 @@ package pcg.tilerecipes
 			{
 				for(var y:int = 0; y < this._patternMap.height; y++)
 				{
-					if(map.getRecipe(x + startX,y + startY).name != _patternMap.getRecipe(x,y).name)
+					if(x + startX >= map.width || y + startY >= map.height)
+						return false;
+					
+					if(map.getRecipe(x + startX,y + startY).name != _patternMap.getRecipe(x,y).name && _patternMap.getRecipe(x,y).name != "*")
+						return false;
+					
+					if(map.getRecipe(x + startX,y + startY).generateSideValue() != _patternMap.getRecipe(x,y).generateSideValue() && _patternMap.getRecipe(x,y).name != "*")
 						return false;
 				}
 			}
@@ -62,7 +68,8 @@ package pcg.tilerecipes
 			{
 				for(var y:int = 0; y < this._patternMap.height; y++)
 				{
-					map.setRecipe(_resultMap.getRecipe(x, y), x + startX, y + startY);
+					if(_resultMap.getRecipe(x,y).name != "*")
+						map.setRecipe(_resultMap.getRecipe(x, y), x + startX, y + startY);
 				}
 			}
 		}

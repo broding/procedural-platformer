@@ -2,3 +2,4 @@ S,StartAreaRecipe
 G,GoalAreaRecipe
 E,EmptyAreaRecipe
 N,DefaultAreaRecipe
+*,EmptyAreaRecipe

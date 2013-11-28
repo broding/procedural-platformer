@@ -7,6 +7,6 @@ package pcg.arearecipes
 	{
 		function getName():String;
 		function getAvailableEdges():Edge;
-		function generateArea():Area;
+		function generateArea(edges:Edge):Area;
 	}
 }

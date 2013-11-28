@@ -7,7 +7,10 @@ package pcg
 		public var left:Boolean;
 		public var right:Boolean;
 		
-		public function Edge(up:Boolean = true, down:Boolean = true, left:Boolean = true, right:Boolean = true)
+		/**
+		 * If edge is FALSE!!!!, then its closed, a wall should be placed
+		 */
+		public function Edge(up:Boolean = false, down:Boolean = false, left:Boolean = false, right:Boolean = false)
 		{
 			this.up = up;
 			this.down = down;

@@ -40,7 +40,12 @@ package pcg.tilerecipes
 				
 				for(var x:int = 0; x < values.length; x++)
 				{
-					setRecipe(recipeLibrary.getRecipe(values[x]), x, y);
+					var name:String = (values[x] as String).substr(0, 1);
+					var sides:String = (values[x] as String).substr(1);
+					
+					var recipe:TileRecipe = recipeLibrary.getRecipe(name);
+					recipe.calculateEdges(int(sides));
+					setRecipe(recipe, x, y);
 				}
 			}
 		}
