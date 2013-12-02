@@ -5,16 +5,16 @@ package pcg.arearecipes
 	import pcg.arearules.BorderRocksRule;
 	import pcg.arearules.NeighboursToRockRule;
 	import pcg.arearules.RuleItterator;
-	import pcg.tilegenerators.SideTileGenerator;
+	import pcg.tilegenerators.SimpleTileGenerator;
 
 	public class DefaultAreaRecipe implements AreaRecipe
 	{
 		public function generateArea(edges:Edge):Area
 		{
-			var area:pcg.Area = new pcg.Area(new SideTileGenerator(edges), 30, 20, edges);
+			var area:pcg.Area = new pcg.Area(new SimpleTileGenerator(), Area.WIDTH, Area.HEIGHT, edges);
 			
 			var itterator:RuleItterator = new RuleItterator();
-			itterator.addRule(new NeighboursToRockRule(2, 5));
+			itterator.addRule(new NeighboursToRockRule(1, 6));
 			itterator.addRule(new BorderRocksRule());
 			
 			area = itterator.itterate(area);

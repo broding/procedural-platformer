@@ -11,10 +11,10 @@ package pcg.arearecipes
 	{	
 		public function generateArea(edges:Edge):Area
 		{
-			var area:pcg.Area = new pcg.Area(new SideTileGenerator(edges), 30, 20, edges);
+			var area:pcg.Area = new pcg.Area(new SideTileGenerator(edges), Area.WIDTH, Area.HEIGHT, edges);
 			
 			var itterator:RuleItterator = new RuleItterator();
-			itterator.addRule(new NeighboursToRockRule(4, 5));
+			itterator.addRule(new NeighboursToRockRule(3, 5));
 			itterator.addRule(new BorderRocksRule());
 			
 			area = itterator.itterate(area);

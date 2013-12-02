@@ -40,12 +40,9 @@ package pcg.painter
 					for (var y:int = 0; y < tilemap.heightInTiles; y++)
 					{
 						tilemap.setTile(paints[j].applyPaint(x, y, tilemap, tilemap.getTile(x, y)), x, y);
-						trace('busy');
 					}
 				}
 			}
-			
-			trace('done');
 			
 			return tilemap;
 		}

@@ -21,13 +21,13 @@ package pcg.levelgenerator
 			for each(var node:Node in nodes)
 			{
 				var area:Area = AreaRecipeFactory.createAreaFromGraphNode();
-				var x:int =  Math.floor((Math.random() * nodes.length)) * 30;
-				var y:int =  Math.floor((Math.random() * nodes.length)) * 20;
+				var x:int =  Math.floor((Math.random() * nodes.length)) * Area.WIDTH;
+				var y:int =  Math.floor((Math.random() * nodes.length)) * Area.HEIGHT;
 				
 				while(busyAreas[x * y] != null)
 				{
-					x =  Math.floor((Math.random() * nodes.length)) * 30;
-					y =  Math.floor((Math.random() * nodes.length)) * 20;
+					x =  Math.floor((Math.random() * nodes.length)) * Area.WIDTH;
+					y =  Math.floor((Math.random() * nodes.length)) * Area.HEIGHT;
 				}
 				
 				busyAreas[x*y] = true;

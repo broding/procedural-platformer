@@ -31,7 +31,7 @@ package pcg
 		{
 			super.create();
 			
-			FlxG.worldBounds = new FlxRect(0, 0, 30 * 16 * 5, 20 * 16 * 5);
+			FlxG.worldBounds = new FlxRect(0, 0, Area.WIDTH * 16 * 5, 20 * 16 * 5);
 			Game.emitEventCallback = emitGameEvent;
 			_gameEventListeners = new Array(); 
 			

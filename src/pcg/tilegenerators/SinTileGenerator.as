@@ -6,10 +6,12 @@ package pcg.tilegenerators
 	{	
 		public function getTile(x:int, y:int, width:int, height:int):int
 		{
-			var value:Number = Math.sin(x) / 2;
-			value += Math.sin(y) / 2;
+			var xRandom:Number = 1 + Math.random() * 3;
+			var yRandom:Number = 1 + Math.random() * 3;
 			
-			return value > 0 ? Area.BOTTOM_ROCK : Area.EMPTY;
+			var value:Number = Math.sin(x * xRandom) + Math.sin(y * yRandom);
+			
+			return value > 0.09 ? Area.BOTTOM_ROCK : Area.EMPTY;
 		}
 		
 		public const lerp:Function = function( amount:Number , start:Number, end:Number ):Number 

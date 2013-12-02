@@ -12,7 +12,7 @@ package pcg.arearecipes
 	{	
 		public function generateArea(edges:Edge):Area
 		{
-			var area:pcg.Area = new pcg.Area(new FullTileGenerator(), 30, 20, edges);
+			var area:pcg.Area = new pcg.Area(new FullTileGenerator(), Area.WIDTH, Area.HEIGHT, edges);
 			
 			var itterator:RuleItterator = new RuleItterator();
 			itterator.addRule(new NeighboursToRockRule(5, 8));

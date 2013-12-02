@@ -37,17 +37,17 @@ package pcg.levelgenerator
 				if(Math.random() > 0.3) // left and right
 				{
 					var leftright:int = Boolean( Math.round(Math.random())) ? -1 : 1;
-					var newX:int = parentArea.x + (30 * leftright);
+					var newX:int = parentArea.x + (Area.WIDTH * leftright);
 					var newY:int = parentArea.y;
 					
 					if(usedAreas[newX * parentArea.y] != null)
 					{
-						newX = parentArea.x + (30 * -leftright);
+						newX = parentArea.x + (Area.WIDTH * -leftright);
 						
 						if(usedAreas[newX * parentArea.y] != null)
 						{
 							newX = parentArea.x;
-							newY = parentArea.y + 20;
+							newY = parentArea.y + Area.HEIGHT;
 						}
 					}
 					
@@ -57,7 +57,7 @@ package pcg.levelgenerator
 				else // down
 				{
 					area.x = parentArea.x;
-					area.y = parentArea.y + 20;
+					area.y = parentArea.y + Area.HEIGHT;
 				}
 			}
 			

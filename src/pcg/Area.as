@@ -10,6 +10,9 @@ package pcg
 	{
 		[Embed(source = "../../assets/tileset.png")] private var _tilesetImage:Class;
 		[Embed(source = "../../assets/bg.png")] private var _bgImage:Class;
+
+		public static const WIDTH:uint = 20;
+		public static const HEIGHT:uint = 8;
 		
 		public static const EMPTY:int = 0;
 		public static const TOP_ROCK:int = 1;
@@ -114,10 +117,7 @@ package pcg
 		
 		public static function isSolidTile(tileIndex:int):Boolean
 		{
-			if (tileIndex == Area.TOP_ROCK || tileIndex == Area.SINGLE_ROCK || tileIndex == Area.MIDDLE_ROCK2 || tileIndex == Area.MIDDLE_ROCK || tileIndex == Area.BOTTOM_ROCK)
-				return true;
-			else 
-				return false;
+			return tileIndex != 0;
 		}
 
 		public function get edges():Edge

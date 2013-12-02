@@ -36,7 +36,7 @@ package pcg
 		
 		public function Level(graph:Graph, levelGenerator:LevelGenerator)
 		{
-			_areaSize = new FlxPoint(30, 20);
+			_areaSize = new FlxPoint(Area.WIDTH, Area.HEIGHT);
 			_graph = graph;
 			_levelGenerator = levelGenerator;
 			_rules = new Array();
@@ -139,8 +139,8 @@ package pcg
 				{
 					var tileRecipe:TileRecipe = _map.getRecipe(x, y);
 					var area:Area = tileRecipe.areaRecipe.generateArea(tileRecipe.edges);
-					area.x = x * 30;
-					area.y = y * 20;
+					area.x = x * Area.WIDTH;
+					area.y = y * Area.HEIGHT;
 					
 					addArea(area);
 				}
