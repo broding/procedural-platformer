@@ -85,7 +85,7 @@ package pcg
 			FlxG.collide(_player.bombs, _level.collideMap);
 			FlxG.collide(_emitter, _level.collideMap);
 			
-			if(FlxG.camera.zoom == 2)
+			if(FlxG.camera.zoom == 1)
 			{
 				FlxG.camera.follow(_player);
 			}

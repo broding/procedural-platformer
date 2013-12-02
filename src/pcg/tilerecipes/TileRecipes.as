@@ -6,6 +6,7 @@ package pcg.tilerecipes
 	
 	import flash.utils.getDefinitionByName;
 	
+	import pcg.arearecipes.AreaRecipe;
 	import pcg.arearecipes.DefaultAreaRecipe;
 	import pcg.arearecipes.EmptyAreaRecipe;
 	import pcg.arearecipes.GoalAreaRecipe;
@@ -40,8 +41,7 @@ package pcg.tilerecipes
 				for each(var line:String in lines)
 				{
 					var values:Array = line.split(",");
-					var areaRecipeClass:Class = getDefinitionByName("pcg.arearecipes::" + values[1]) as Class;
-					_recipes.push(new TileRecipe(values[0], new areaRecipeClass()));
+					_recipes.push(new TileRecipe(values[0], getAreaRecipe(values[1]) ) )
 				}
 				
 				_loaded = true;
@@ -63,6 +63,27 @@ package pcg.tilerecipes
 			}
 			
 			throw new Error("Could not found recipe");
+		}
+		
+		public static function getAreaRecipe(type:String):AreaRecipe
+		{
+			switch(type)
+			{
+				case "StartAreaRecipe":
+					return new StartAreaRecipe();
+					break;
+				case "GoalAreaRecipe":
+					return new GoalAreaRecipe();
+					break;
+				case "DefaultAreaRecipe":
+					return new DefaultAreaRecipe();
+					break;
+				case "EmptyAreaRecipe":
+					return new EmptyAreaRecipe();
+					break;
+			}
+			
+			throw new Error("Can't find recipe");
 		}
 
 	}

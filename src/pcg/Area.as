@@ -12,7 +12,7 @@ package pcg
 		[Embed(source = "../../assets/bg.png")] private var _bgImage:Class;
 
 		public static const WIDTH:uint = 20;
-		public static const HEIGHT:uint = 8;
+		public static const HEIGHT:uint = 15;
 		
 		public static const EMPTY:int = 0;
 		public static const TOP_ROCK:int = 1;
