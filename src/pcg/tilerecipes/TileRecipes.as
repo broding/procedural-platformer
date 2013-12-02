@@ -36,6 +36,7 @@ package pcg.tilerecipes
 			function completeHandler(event:LoaderEvent):void 
 			{
 				var csv:String = LoaderMax.getContent("tilerecipes");
+				csv = csv.replace(/\s*\R/g, "\n");
 				var lines:Array = csv.split("\n");
 				
 				for each(var line:String in lines)
@@ -83,7 +84,8 @@ package pcg.tilerecipes
 					break;
 			}
 			
-			throw new Error("Can't find recipe");
+			throw new Error("Cant find recipe");
+			
 		}
 
 	}

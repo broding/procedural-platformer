@@ -77,7 +77,6 @@ package pcg
 						(map.getTile(x+1, y) != 0 ? 2 : 0) +
 						(map.getTile(x, y+1) != 0 ? 4 : 0);
 					
-					trace(sides);
 					_collideMap.setTile(x, y, sides);
 					
 				}
@@ -113,6 +112,7 @@ package pcg
 		
 		private function addRule(csv:String):void
 		{
+			csv = csv.replace(/\s*\R/g, "\n\n");
 			var split:Array = csv.split("\n\n");
 			
 			var patternCsv:String = split[1];

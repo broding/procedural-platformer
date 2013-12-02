@@ -26,6 +26,7 @@ package pcg.tilerecipes
 		 */
 		public function applyRule(map:Map):Boolean
 		{
+			trace("tried to apply rule");
 			for (var x:int = 0; x < map.width; x++) 
 			{
 				for(var y:int = 0; y < map.height; y++)
@@ -64,6 +65,7 @@ package pcg.tilerecipes
 		
 		private function applyResultMap(map:Map, startX:uint, startY:uint):void
 		{
+			trace("applied");
 			for (var x:int = 0; x < this._patternMap.width; x++) 
 			{
 				for(var y:int = 0; y < this._patternMap.height; y++)
