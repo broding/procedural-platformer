@@ -75,6 +75,25 @@ package pcg.tilerecipes
 		{
 			return _width;
 		}
+		
+		public function print():void
+		{
+			var map:String;
+			trace("map ( " + _width + " - " + _height + ":");
+			
+			for (var y:int; y < _height; y++)
+			{
+				map = "";
+				for(var x:int; x < _width; x++)
+				{
+					map += _recipes[x][y].name + ",";
+				}
+				
+				trace(map);
+			}
+			
+			trace("");
+		}
 	}
 
 }

@@ -112,8 +112,8 @@ package pcg
 		
 		private function addRule(csv:String):void
 		{
-			csv = csv.replace(/\s*\R/g, "\n\n");
-			var split:Array = csv.split("\n\n");
+			csv = csv.replace("\r", "");
+			var split:Array = csv.split("\n\r\n");
 			
 			var patternCsv:String = split[1];
 			var resultCsv:String = split[2];
@@ -123,8 +123,12 @@ package pcg
 			var pattern:Map = new Map(width, height);
 			var result:Map = new Map(width, height);
 			
+			
 			pattern.loadFromCSV(patternCsv, _recipesLibrary);
 			result.loadFromCSV(resultCsv, _recipesLibrary);
+			pattern.print();
+			
+			result.print();
 			
 			var rule:TileRule = new TileRule(pattern, result);
 			
