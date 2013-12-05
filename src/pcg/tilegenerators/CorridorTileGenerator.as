@@ -13,10 +13,26 @@ package pcg.tilegenerators
 		
 		public function getTile(x:int, y:int, width:int, height:int):int
 		{
-			if(x == int(width / 2) || y == int(height / 2))
+			if(x == int(width / 2) && y == int(height / 2))
 				return 0;
+				
+			if(x == int(width / 2) || y == int(height / 2))
+			{
+				if(
+					(x > int(width / 2) && _edges.right) ||
+					(x < int(width / 2) && _edges.left) ||
+					(y < int(height / 2) && _edges.up) ||
+					(y > int(height / 2) && _edges.down))
+				{
+					return 0;
+				}
+			}
 			else
+			{
 				return 1;
+			}
+			
+			return 1;
 		}
 	}
 }
