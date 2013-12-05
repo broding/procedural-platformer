@@ -12,6 +12,7 @@ package pcg.arearules.structures
 		public static const ROCK:String = "1";
 		public static const LADDER:String = "L";
 		public static const TREASURE:String = "T";
+		public static const SPIKES:String = "S";
 		
 		private static var _groups:Array;
 		private static var _onComplete:Function;
@@ -20,7 +21,7 @@ package pcg.arearules.structures
 		{
 			_onComplete = onComplete;
 			
-			var transformations:Array = ["simple"];
+			var transformations:Array = ["simple_vertical", "simple_horizontal"];
 			_groups = new Array();
 			
 			var queue:LoaderMax = new LoaderMax({name:"transformationsQueue", onComplete:completeHandler});
@@ -35,7 +36,7 @@ package pcg.arearules.structures
 				for each(var transformationName:String in transformations)
 				{
 					var group:TransformationGroup = new TransformationGroup(transformationName);
-					group.passCSV(LoaderMax.getLoader(transformationName));
+					group.passCSV(LoaderMax.getContent(transformationName));
 					_groups.push(group);
 				}
 				

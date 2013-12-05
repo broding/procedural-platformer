@@ -19,7 +19,7 @@ package pcg.tilerecipes
 		private var _edges:Edge;
 		
 		public function TileRecipe(name:String, areaRecipe:AreaRecipe, sideValue:int = 0) 
-		{
+		{	
 			this._name = name;
 			this._areaRecipe = areaRecipe;
 			this._edges = new Edge();
@@ -58,6 +58,75 @@ package pcg.tilerecipes
 		public function generateSideValue():uint
 		{
 			return (_edges.up ? 1 : 0) + (_edges.right ? 2 : 0) + (_edges.down ? 4 : 0) + (_edges.left ? 8 : 0);
+		}
+		
+		public function edgeTest():void
+		{
+			this._edges = new Edge();
+			calculateEdges(1);
+			assert(_edges.up && !_edges.right && !_edges.down && !_edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(2);
+			assert(!_edges.up && _edges.right && !_edges.down && !_edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(3);
+			assert(_edges.up && _edges.right && !_edges.down && !_edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(4);
+			assert(!_edges.up && !_edges.right && _edges.down && !_edges.left);
+
+			this._edges = new Edge();
+			calculateEdges(5);
+			assert(_edges.up && !_edges.right && _edges.down && !_edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(6);
+			assert(!_edges.up && _edges.right && _edges.down && !_edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(7);
+			assert(_edges.up && _edges.right && _edges.down && !_edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(8);
+			assert(!_edges.up && !_edges.right && !_edges.down && _edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(9);
+			assert(_edges.up && !_edges.right && !_edges.down && _edges.left);
+
+			this._edges = new Edge();
+			calculateEdges(10);
+			assert(!_edges.up && _edges.right && !_edges.down && _edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(11);
+			assert(_edges.up && _edges.right && !_edges.down && _edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(12);
+			assert(!_edges.up && !_edges.right && _edges.down && _edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(13);
+			assert(_edges.up && !_edges.right && _edges.down && _edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(14);
+			assert(!_edges.up && _edges.right && _edges.down && _edges.left);
+			
+			this._edges = new Edge();
+			calculateEdges(15);
+			assert(_edges.up && _edges.right && _edges.down && _edges.left);
+		}
+		
+		public function assert(expression:Boolean):void
+		{
+			if (!expression)
+				throw new Error("Assertion failed!");
 		}
 	}
 
