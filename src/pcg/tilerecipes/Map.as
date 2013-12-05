@@ -30,7 +30,7 @@ package pcg.tilerecipes
 			}
 		}
 		
-		public function loadFromCSV(csv:String, recipeLibrary:TileRecipes):void
+		public function loadFromCSV(csv:String):void
 		{
 			var lines:Array = csv.split("\n");
 			
@@ -43,7 +43,7 @@ package pcg.tilerecipes
 					var name:String = (values[x] as String).substr(0, 1);
 					var sides:String = (values[x] as String).substr(1);
 					
-					var recipe:TileRecipe = recipeLibrary.getRecipe(name);
+					var recipe:TileRecipe = TileRecipes.getRecipe(name);
 					recipe.calculateEdges(int(sides));
 					setRecipe(recipe, x, y);
 				}

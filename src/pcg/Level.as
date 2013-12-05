@@ -9,13 +9,15 @@ package pcg
 	import org.flixel.FlxTilemap;
 	
 	import pcg.arearecipes.StartAreaRecipe;
-	import pcg.graph.Graph;
+	import pcg.arearules.structures.Transformations;
 	import pcg.levelgenerator.LevelGenerator;
+	import pcg.loader.Loader;
 	import pcg.tilegenerators.EmptyTileGenerator;
 	import pcg.tilerecipes.Map;
 	import pcg.tilerecipes.TileRecipe;
 	import pcg.tilerecipes.TileRecipes;
 	import pcg.tilerecipes.TileRule;
+	import pcg.tilerecipes.TileRules;
 
 	public class Level implements GameEventListener
 	{	
@@ -25,21 +27,21 @@ package pcg
 		private var _areaSize:FlxPoint;
 		
 		private var _map:Map;
-		private var _rules:Array;
 		private var _recipesLibrary:TileRecipes;
-		private var _graph:Graph;
 		private var _levelGenerator:LevelGenerator;
 		private var _areas:Vector.<Area>;
 		private var _collideMaps:FlxGroup;
 		private var _collideMap:FlxTilemap;
 		private var _decorationMaps:FlxGroup;
 		
-		public function Level(graph:Graph, levelGenerator:LevelGenerator)
+		private var _loaded:Boolean;
+		
+		public function Level(levelGenerator:LevelGenerator)
 		{
+			_loaded = false;
+			
 			_areaSize = new FlxPoint(Area.WIDTH, Area.HEIGHT);
-			_graph = graph;
 			_levelGenerator = levelGenerator;
-			_rules = new Array();
 			
 			_collideMap = new FlxTilemap();
 			var emptyArea:Area = new Area(new EmptyTileGenerator(), 400, 400, new Edge());
@@ -48,16 +50,20 @@ package pcg
 			_collideMaps = new FlxGroup();
 			_decorationMaps = new FlxGroup();
 			
-			_areas = _levelGenerator.generateLevelFromGraph(_graph);
-			
 			_map = new Map(5,5);
 			var startRecipe:TileRecipe = new TileRecipe("S", new StartAreaRecipe(), TileRecipe.RIGHT);
 			_map.setRecipe(startRecipe, 0, 0);
 			
-			_recipesLibrary = new TileRecipes(function():void
+			var loader:Loader = new Loader(function():void
 			{
-				loadRules(["start", "addDefault", "addDefault2", "twister"]);
+				applyRules();
+				loadMap();
 			});
+				
+			loader.addLoadable(new TileRecipes());
+			loader.addLoadable(new TileRules());
+			loader.addLoadable(new Transformations());
+			loader.start();
 		}
 		
 		private function paint():void
@@ -87,52 +93,9 @@ package pcg
 		{	
 			for(var i:int = 0; i < 35; i++)
 			{
-				(_rules[Math.floor(Math.random() * _rules.length)] as TileRule).applyRule(_map);
+				var rule:TileRule = TileRules.getRule(Math.floor(Math.random() * TileRules.totalRules));
+				rule.applyRule(_map);
 			}
-		}
-		
-		private function loadRules(ruleNames:Array):void
-		{
-			var queue:LoaderMax = new LoaderMax({name:"ruleQueue", onComplete:completeHandler});
-
-			for(var i:int = 0; i < ruleNames.length; i++)
-				queue.append( new com.greensock.loading.DataLoader("../assets/tilerules/" + ruleNames[i] + ".csv", {name:ruleNames[i]}));
-			
-			queue.load();
-			
-			function completeHandler(event:LoaderEvent):void 
-			{
-				for each(var ruleName:String in ruleNames)
-					addRule(LoaderMax.getContent(ruleName));
-					
-				applyRules();
-				loadMap();
-			}
-		}
-		
-		private function addRule(csv:String):void
-		{
-			csv = csv.replace("\r", "");
-			var split:Array = csv.split("\n\r\n");
-			
-			var patternCsv:String = split[1];
-			var resultCsv:String = split[2];
-			var width:int = split[1].split("\n")[0].split(",").length;
-			var height:int = split[1].split("\n").length;
-			
-			var pattern:Map = new Map(width, height);
-			var result:Map = new Map(width, height);
-			
-			
-			pattern.loadFromCSV(patternCsv, _recipesLibrary);
-			result.loadFromCSV(resultCsv, _recipesLibrary);
-			pattern.print();
-			
-			result.print();
-			
-			var rule:TileRule = new TileRule(pattern, result);
-			
-			_rules.push(rule);
 		}
 		
 		private function loadMap():void
