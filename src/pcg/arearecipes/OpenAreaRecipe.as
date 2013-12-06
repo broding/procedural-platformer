@@ -8,7 +8,7 @@ package pcg.arearecipes
 	import pcg.arearules.structures.Transformations;
 	import pcg.tilegenerators.CorridorTileGenerator;
 
-	public class DefaultAreaRecipe implements AreaRecipe
+	public class OpenAreaRecipe implements AreaRecipe
 	{
 		public function generateArea(edges:Edge):Area
 		{
@@ -17,6 +17,7 @@ package pcg.arearecipes
 			var transformRule:TransformationRule = new TransformationRule();
 			transformRule.addTransformationGroup(Transformations.getTransformationGroup("simple_vertical"));
 			transformRule.addTransformationGroup(Transformations.getTransformationGroup("simple_horizontal"));
+			transformRule.addTransformationGroup(Transformations.getTransformationGroup("openarea"));
 			
 			transformRule.applyTransformations(area);
 			
@@ -38,7 +39,5 @@ package pcg.arearecipes
 		{
 			return "N";
 		}
-		
-		
 	}
 }

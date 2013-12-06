@@ -1,9 +1,5 @@
 package pcg
 {	
-	import com.greensock.events.LoaderEvent;
-	import com.greensock.loading.DataLoader;
-	import com.greensock.loading.LoaderMax;
-	
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
@@ -33,6 +29,7 @@ package pcg
 		private var _collideMaps:FlxGroup;
 		private var _collideMap:FlxTilemap;
 		private var _decorationMaps:FlxGroup;
+		private var _fluidManager:FluidManager;
 		
 		private var _loaded:Boolean;
 		
@@ -42,6 +39,8 @@ package pcg
 			
 			_areaSize = new FlxPoint(Area.WIDTH, Area.HEIGHT);
 			_levelGenerator = levelGenerator;
+			
+			_fluidManager = new FluidManager();
 			
 			_collideMap = new FlxTilemap();
 			var emptyArea:Area = new Area(new EmptyTileGenerator(), 400, 400, new Edge());
@@ -66,32 +65,9 @@ package pcg
 			loader.start();
 		}
 		
-		private function paint():void
-		{
-			for (var x:int = 0; x < _collideMap.widthInTiles; x++)
-			{
-				for (var y:int = 0; y < _collideMap.heightInTiles; y++)
-				{
-					var map:FlxTilemap = _collideMap;
-					
-					if(map.getTile(x, y) == 0)
-						continue;
-					
-					var sides:int = 
-						(map.getTile(x-1, y) != 0 ? 8 : 0) +
-						(map.getTile(x, y-1) != 0 ? 1 : 0) +
-						(map.getTile(x+1, y) != 0 ? 2 : 0) +
-						(map.getTile(x, y+1) != 0 ? 4 : 0);
-					
-					_collideMap.setTile(x, y, sides);
-					
-				}
-			}
-		}
-		
 		private function applyRules():void
 		{	
-			for(var i:int = 0; i < 35; i++)
+			for(var i:int = 0; i < 80; i++)
 			{
 				var rule:TileRule = TileRules.getRule(Math.floor(Math.random() * TileRules.totalRules));
 				rule.applyRule(_map);
@@ -113,7 +89,47 @@ package pcg
 				}
 			}
 			
-			paint();
+			_fluidManager.init(_collideMap);
+			
+			for (x = 0; x < _collideMap.widthInTiles; x++)
+			{
+				for (y = 0; y < _collideMap.heightInTiles; y++)
+				{
+					paint(x,y);	
+					processTileType(x, y);
+				}
+			}
+			
+			// process till all fluid is still
+			while(!_fluidManager.isAllFluidStill())
+				_fluidManager.step();
+			
+		}
+		
+		private function paint(x:int, y:int):void
+		{
+			var map:FlxTilemap = _collideMap;
+			
+			if(map.getTile(x, y) == 0 || map.getTile(x, y) > 15)
+				return;
+			
+			var sides:int = 
+				(map.getTile(x-1, y) != 0 ? 8 : 0) +
+				(map.getTile(x, y-1) != 0 ? 1 : 0) +
+				(map.getTile(x+1, y) != 0 ? 2 : 0) +
+				(map.getTile(x, y+1) != 0 ? 4 : 0);
+			
+			_collideMap.setTile(x, y, sides);
+		}
+		
+		private function processTileType(x:int, y:int):void
+		{
+			switch(_collideMap.getTile(x,y))
+			{
+				case TileType.WATER:
+					_fluidManager.addWater(x,y);
+					_collideMap.setTile(x,y, 0);
+			}
 		}
 		
 		private function addArea(area:Area):void
@@ -154,6 +170,11 @@ package pcg
 		public function get areaSize():FlxPoint
 		{
 			return _areaSize;
+		}
+
+		public function get fluidManager():FluidManager
+		{
+			return _fluidManager;
 		}
 
 		

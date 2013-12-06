@@ -7,13 +7,7 @@ package pcg.arearules.structures
 	import pcg.loader.Loadable;
 
 	public class Transformations implements Loadable
-	{
-		public static const EMPTY:String = "0";
-		public static const ROCK:String = "1";
-		public static const LADDER:String = "L";
-		public static const TREASURE:String = "T";
-		public static const SPIKES:String = "S";
-		
+	{	
 		private static var _groups:Array;
 		private static var _onComplete:Function;
 		
@@ -21,7 +15,7 @@ package pcg.arearules.structures
 		{
 			_onComplete = onComplete;
 			
-			var transformations:Array = ["simple_vertical", "simple_horizontal"];
+			var transformations:Array = ["simple_vertical", "simple_horizontal", "openarea"];
 			_groups = new Array();
 			
 			var queue:LoaderMax = new LoaderMax({name:"transformationsQueue", onComplete:completeHandler});

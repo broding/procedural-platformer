@@ -1,6 +1,9 @@
 package pcg 
 {
-	import org.flixel.*;
+	import org.flixel.FlxG;
+	import org.flixel.FlxGroup;
+	import org.flixel.FlxPoint;
+	import org.flixel.FlxTilemap;
 	/**
 	 * ...
 	 * @author Bas Roding
@@ -9,7 +12,7 @@ package pcg
 	{
 		public var stepSpeed:Number;
 		private var _stepTimer:Number;
-		private var _map:Area;
+		private var _map:FlxTilemap;
 		private var _newFluids:Array = new Array();
 		private var _removeFluids:Array = new Array();
 		
@@ -39,7 +42,7 @@ package pcg
 			}
 		}
 		
-		public function init(map:Area):void
+		public function init(map:FlxTilemap):void
 		{
 			_map = map;
 			
@@ -49,11 +52,27 @@ package pcg
 			{
 				start = new FlxPoint(Math.floor(Math.random() * map.width), Math.floor(Math.random() * map.height));
 			}
-			
-			var fluid:Fluid = new Fluid(200);
-			fluid.x = start.x * 16;
-			fluid.y = start.y * 16;
+		}
+		
+		public function addWater(x:int, y:int, amount:uint = 150):void
+		{
+			var fluid:Fluid = new Fluid(amount);
+			fluid.x = x * (_map.width / _map.widthInTiles);
+			fluid.y = y * (_map.width / _map.widthInTiles);
 			add(fluid);
+		}
+		
+		public function isAllFluidStill():Boolean
+		{
+			for(var i:int = 0; i < this.length; i++)
+			{
+				var fluid:Fluid = members[i];
+				
+				if(!fluid.still)
+					return false;
+			}
+			
+			return true;
 		}
 		
 		public function step():void
@@ -132,13 +151,15 @@ package pcg
 				}
 			}
 			
-			if (fluid.stepsMoving > 3 && !isWaterTile(fluid.x - fluid.liquidVelocity.x * 16, fluid.y))
+			if (fluid.stepsMoving > 20 && !isWaterTile(fluid.x - fluid.liquidVelocity.x * 16, fluid.y))
 				_removeFluids.push(fluid);
 			
 			fluid.still = false;
 			
 			if(!isWaterTile(fluid.x, fluid.y + 16))
-				fluid.stepsMoving++;
+				fluid.stepsMoving += 5;
+			else
+				fluid.stepsMoving += 1;
 			
 			flowTo(fluid.x + fluid.liquidVelocity.x * 16, fluid.y, fluid);
 		}

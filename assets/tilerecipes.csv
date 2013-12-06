@@ -1,5 +1,7 @@
 S,StartAreaRecipe
 G,GoalAreaRecipe
 E,EmptyAreaRecipe
-N,DefaultAreaRecipe
+N,CorridorAreaRecipe
 *,EmptyAreaRecipe
+W,WaterAreaRecipe
+O,OpenAreaRecipe

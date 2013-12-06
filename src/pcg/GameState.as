@@ -56,6 +56,7 @@ package pcg
 				remove(_level.decorationMaps);
 				remove(_player);
 				remove(_player.bombs);
+				remove(_level.fluidManager);
 				this._gameEventListeners.length = 0;
 			}
 			
@@ -64,11 +65,8 @@ package pcg
 			_player.y = 100;
 			_level = new Level(new RandomLevelGenerator());
 			
-			//var spawnpoint:FlxPoint = _level.getBeginArea().getPlayerSpawnPoint(3);
-			//_player.x = spawnpoint.x;
-			//_player.y = spawnpoint.y;
-			
 			add(_level.collideMap);
+			add(_level.fluidManager);
 			add(_level.decorationMaps);
 			add(_player);
 			add(_player.bombs);
@@ -85,7 +83,7 @@ package pcg
 			FlxG.collide(_player.bombs, _level.collideMap);
 			FlxG.collide(_emitter, _level.collideMap);
 			
-			if(FlxG.camera.zoom == 2)
+			if(FlxG.camera.zoom == 2 || FlxG.camera.zoom == 1)
 			{
 				FlxG.camera.follow(_player);
 			}

@@ -52,7 +52,7 @@ package pcg
 		public function set still(value:Boolean):void 
 		{
 			if (_still)
-				makeGraphic(16, 16, 0x550000ff);
+				makeGraphic(16, 16, 0x5500ffff);
 			else
 				makeGraphic(16, 16, 0x550000ff);
 				

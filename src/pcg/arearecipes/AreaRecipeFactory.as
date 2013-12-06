@@ -7,7 +7,7 @@ package pcg.arearecipes
 	{
 		public static function createAreaFromGraphNode():Area
 		{
-			return new DefaultAreaRecipe().generateArea(new Edge());
+			return new CorridorAreaRecipe().generateArea(new Edge());
 		}
 	}
 }

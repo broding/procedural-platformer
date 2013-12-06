@@ -5,10 +5,12 @@ package pcg.tilerecipes
 	import com.greensock.loading.LoaderMax;
 	
 	import pcg.arearecipes.AreaRecipe;
-	import pcg.arearecipes.DefaultAreaRecipe;
+	import pcg.arearecipes.CorridorAreaRecipe;
 	import pcg.arearecipes.EmptyAreaRecipe;
 	import pcg.arearecipes.GoalAreaRecipe;
+	import pcg.arearecipes.OpenAreaRecipe;
 	import pcg.arearecipes.StartAreaRecipe;
+	import pcg.arearecipes.WaterAreaRecipe;
 	import pcg.loader.Loadable;
 
 	public class TileRecipes implements Loadable
@@ -62,11 +64,17 @@ package pcg.tilerecipes
 				case "GoalAreaRecipe":
 					return new GoalAreaRecipe();
 					break;
-				case "DefaultAreaRecipe":
-					return new DefaultAreaRecipe();
+				case "CorridorAreaRecipe":
+					return new CorridorAreaRecipe();
 					break;
 				case "EmptyAreaRecipe":
 					return new EmptyAreaRecipe();
+					break;
+				case "WaterAreaRecipe":
+					return new WaterAreaRecipe();
+					break;
+				case "OpenAreaRecipe":
+					return new OpenAreaRecipe();
 					break;
 			}
 			

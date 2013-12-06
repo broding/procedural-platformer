@@ -17,7 +17,16 @@ package pcg.tilerecipes
 			_onComplete = onComplete;
 			_rules = new Array();
 			
-			loadRules(["start", "addDefault", "addDefault2", "addDefault3", "addDefault4", "addDefault5", "twister"]);
+			loadRules(["start", 
+				"addDefault", 
+				"addDefault2", 
+				"addDefault3",
+				"addDefault4",
+				"addDefault5",
+				"addDefault6",
+				"addDefault7",
+				"twister",
+				"addWater"]);
 		}
 		
 		private static function loadRules(ruleNames:Array):void

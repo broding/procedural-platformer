@@ -4,6 +4,6 @@ package pcg.arearecipes
 	{
 		StartAreaRecipe;
 		GoalAreaRecipe;
-		DefaultAreaRecipe;
+		CorridorAreaRecipe;
 	}
 }

@@ -1,5 +1,6 @@
 package pcg.arearules.structures
 {
+	import pcg.TileType;
 	
 
 	public class Transformation
@@ -34,8 +35,8 @@ package pcg.arearules.structures
 				
 				for(var y:int = 0; y < this._height; y++)
 				{
-					_pattern[x][y] = Transformations.EMPTY;
-					_result[x][y] = Transformations.EMPTY;
+					_pattern[x][y] = TileType.EMPTY;
+					_result[x][y] = TileType.EMPTY;
 				}
 			}
 			
