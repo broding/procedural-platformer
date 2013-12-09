@@ -52,6 +52,22 @@ package pcg
 				}
 			}
 		}
+		
+		private function processTile(tile:String):uint
+		{
+			switch(tile)
+			{
+				case "L":
+					return TileType.LADDER;
+					break;
+				
+				case "X":
+					return Math.random() > 0.5 ? 0 : 1;
+					break;
+			}
+			
+			return int(tile);
+		}
 
 		public function set y(value:int):void
 		{
@@ -90,9 +106,9 @@ package pcg
 			return _map[y][x];
 		}
 		
-		public function setTile(value:int, x:int, y:int):void
+		public function setTile(value:String, x:int, y:int):void
 		{
-			_map[y][x] = value;
+			_map[y][x] = processTile(value);
 		}
 		
 		public function get y():int
