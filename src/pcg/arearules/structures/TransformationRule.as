@@ -36,7 +36,7 @@ package pcg.arearules.structures
 			{
 				for(var y:int = 0; y < area.height; y++)
 				{
-					if(checkSubmap(transformation, area, x, y) && Math.random() * 70 + 3 < transformation.width * transformation.height)
+					if(checkSubmap(transformation, area, x, y))
 					{
 						applyResultTransformation(transformation, area, x, y);
 					}
