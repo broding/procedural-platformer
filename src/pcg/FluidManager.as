@@ -31,6 +31,7 @@ package pcg
 		
 		override public function update():void 
 		{
+			return;
 			super.update();
 			
 			_stepTimer += FlxG.elapsed;

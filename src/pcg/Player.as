@@ -12,26 +12,32 @@ package pcg
 	 */
 	public class Player extends FlxSprite implements GameEventListener
 	{
-		private static const WALK_SPEED:uint = 70;
-		private static const JUMP_POWER:uint = 180;
+		private static const WALK_SPEED:uint = 119;
+		private static const JUMP_POWER:uint = 240;
 		private static const RUN_SPEED:uint = 130;
 		
-		[Embed(source = "../../assets/player.png")] private var _playerImage:Class;
+		[Embed(source = "../../assets/player2.png")] private var _playerImage:Class;
+		[Embed(source = "../../assets/muzzle.png")] private var _muzzleImage:Class;
 		
 		private var _jumping:Boolean = false;
 		private var _jumpedAgo:Number = 0;
 		private var _bombs:FlxGroup;
+		private var _weapon:Weapon;
+		
+		private var _justLandedTimer:Number;
 		
 		public function Player() 
 		{
 			_bombs = new FlxGroup();
+			_weapon = new Weapon();
 			
 			this.loadGraphic(_playerImage, true, true, 16, 16);
-			this.addAnimation("idle", [0, 1, 2, 3], 10);
-			this.addAnimation("walk", [4, 5, 6, 7], 10);
-			this.addAnimation("jump", [8, 9], 3, false);
-			this.addAnimation("jump_end", [10], 0, false);
-			this.addAnimation("duck", [11, 12], 10);
+			this.addAnimation("idle", [0], 10);
+			this.addAnimation("walk", [0, 1, 0, 2], 7);
+			this.addAnimation("jump", [3], 3, false);
+			this.addAnimation("jump_falling", [4, 5], 5);
+			this.addAnimation("jump_end", [6, 0], 5, false);
+			this.addAnimation("shooting", [7, 0], 5);
 			this.width = 10;
 			this.offset.x = 3;
 		}
@@ -39,6 +45,8 @@ package pcg
 		override public function update():void 
 		{
 			super.update();
+			
+			_weapon.update();
 			
 			checkAnimation();
 			
@@ -50,24 +58,32 @@ package pcg
 					velocity.x = WALK_SPEED;
 				else 
 					velocity.x = 0;
-				if (FlxG.keys.B || FlxG.keys.UP)
+				if (FlxG.keys.justPressed("UP") || FlxG.keys.justPressed("B"))
 				{
 					jump();
 				}
 				
-				if(FlxG.keys.justPressed("X"))
+				if(FlxG.keys.X)
 				{
-					dropBomb();
+					//dropBomb();
+					var fired:Boolean = _weapon.fire(x, y, facing);
+					
+					if(fired && velocity.x == 0 && !_jumping && _justLandedTimer == 0)
+						play("shooting");
+					
 				}
 			}
+			
+			_justLandedTimer = Math.max(0, _justLandedTimer -= FlxG.elapsed);
 			
 			if (this.justTouched(FLOOR))
 			{
 				_jumping = false;
-				play("jump_end");
+				play("jump_end", true);
+				_justLandedTimer = 0.2;
 			}
 				
-			velocity.y += 10;
+			velocity.y += 13;
 		}
 		
 		private function dropBomb():void
@@ -81,10 +97,13 @@ package pcg
 		
 		private function checkAnimation():void
 		{
-			if (!_jumping && velocity.x == 0)
+			if (!_jumping && velocity.x == 0 && _justLandedTimer == 0)
 				play("idle");
-			else if (!_jumping && velocity.x != 0)
+			else if (!_jumping && velocity.x != 0 && _justLandedTimer == 0)
 				play("walk");
+			
+			if(_jumping && velocity.y > 0)
+				play("jump_falling");
 				
 			if (velocity.x > 0)
 				facing = RIGHT;
@@ -107,7 +126,6 @@ package pcg
 		{
 			return _bombs;
 		}
-
 		
 		public function receiveEvent(event:GameEvent):void
 		{

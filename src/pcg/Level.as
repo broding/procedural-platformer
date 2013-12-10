@@ -2,6 +2,7 @@ package pcg
 {	
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
+	import org.flixel.FlxSprite;
 	import org.flixel.FlxTilemap;
 	
 	import pcg.arearecipes.StartAreaRecipe;
@@ -23,6 +24,7 @@ package pcg
 		private var _areaSize:FlxPoint;
 		
 		private var _map:Map;
+		private var _ladders:FlxGroup;
 		private var _recipesLibrary:TileRecipes;
 		private var _levelGenerator:LevelGenerator;
 		private var _areas:Vector.<Area>;
@@ -30,6 +32,7 @@ package pcg
 		private var _collideMap:FlxTilemap;
 		private var _decorationMaps:FlxGroup;
 		private var _fluidManager:FluidManager;
+		private var _background:FlxGroup;
 		
 		private var _loaded:Boolean;
 		
@@ -39,6 +42,7 @@ package pcg
 			
 			_areaSize = new FlxPoint(Area.WIDTH, Area.HEIGHT);
 			_levelGenerator = levelGenerator;
+			_ladders = new FlxGroup();
 			
 			_fluidManager = new FluidManager();
 			
@@ -63,6 +67,18 @@ package pcg
 			loader.addLoadable(new TileRules());
 			loader.addLoadable(new Transformations());
 			loader.start();
+			
+			_background = new FlxGroup();
+			var timesX:uint = (1 * _areaSize.x * 16) / 32;
+			var timesY:uint = (1 * _areaSize.y * 16) / 32;
+			
+			for(var x:int = 0; x < timesX; x++)
+			{
+				for(var y:int = 0; y < timesY; y++)
+				{
+					_background.add(new FlxSprite(x * 32, y * 32, _bgImage));
+				}
+			}
 		}
 		
 		private function applyRules():void
@@ -129,6 +145,11 @@ package pcg
 				case TileType.WATER:
 					_fluidManager.addWater(x,y);
 					_collideMap.setTile(x,y, 0);
+					break;
+				case TileType.LADDER:
+					addLadder(x,y);
+					_collideMap.setTile(x,y, 0);
+					break;
 			}
 		}
 		
@@ -137,9 +158,29 @@ package pcg
 			for(var x:int = area.x; x < area.x + area.width; x++)
 			{
 				for(var y:int = area.y; y < area.y + area.height; y++)
-				{
+				{	
 					_collideMap.setTile(x, y, area.getTile(x - area.x, y - area.y), true);
 				}
+			}
+		}
+		
+		private function addLadder(x:int, y:int):void
+		{
+			var ladder:Ladder = new Ladder();
+			ladder.x = x * 16;
+			ladder.y = y * 16;
+			ladders.add(ladder);
+			
+			var i:int = 1;
+			
+			while(_collideMap.getTile(x, y + i) == 0)
+			{
+				ladder = new Ladder();
+				ladder.x = x * 16;
+				ladder.y = (y + i) * 16;
+				ladders.add(ladder);
+				
+				i++;
 			}
 		}
 		
@@ -175,6 +216,16 @@ package pcg
 		public function get fluidManager():FluidManager
 		{
 			return _fluidManager;
+		}
+
+		public function get ladders():FlxGroup
+		{
+			return _ladders;
+		}
+
+		public function get background():FlxGroup
+		{
+			return _background;
 		}
 
 		
