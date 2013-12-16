@@ -1,6 +1,5 @@
 package org.flixel
 {
-	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.geom.ColorTransform;
@@ -19,6 +18,12 @@ package org.flixel
 	public class FlxSprite extends FlxObject
 	{
 		[Embed(source="data/default.png")] protected var ImgDefault:Class;
+		
+		
+		public var offsetToParent:FlxPoint;
+		protected var _colorFlashTime:Number;
+		protected var _colorFlashing:Boolean;
+		protected var _originalColorTransform:ColorTransform;
 		
 		/**
 		 * WARNING: The origin of the sprite will default to its center.
@@ -176,6 +181,8 @@ package org.flixel
 			offset = new FlxPoint();
 			origin = new FlxPoint();
 			
+			offsetToParent = new FlxPoint();
+			
 			scale = new FlxPoint(1.0,1.0);
 			_alpha = 1;
 			_color = 0x00ffffff;
@@ -191,6 +198,9 @@ package org.flixel
 			_curFrame = 0;
 			_curIndex = 0;
 			_frameTimer = 0;
+			
+			_colorFlashTime = 0;
+			_colorFlashing = false;
 
 			_matrix = new Matrix();
 			_callback = null;
@@ -405,6 +415,23 @@ package org.flixel
 			frames = (_flashRect2.width / _flashRect.width) * (_flashRect2.height / _flashRect.height);
 			if(_colorTransform != null) framePixels.colorTransform(_flashRect,_colorTransform);
 			_curIndex = 0;
+		}
+		
+		override public function update():void
+		{
+			super.update();
+			
+			if(_colorFlashing)
+			{
+				if(_colorFlashTime < 0)
+				{
+					_colorFlashing = false;
+					_colorTransform = null;
+					calcFrame();
+				}
+				
+				_colorFlashTime -= FlxG.elapsed;
+			}
 		}
 		
 		/**
@@ -915,6 +942,17 @@ package org.flixel
 			if(_callback != null)
 				_callback(((_curAnim != null)?(_curAnim.name):null),_curFrame,_curIndex);
 			dirty = false;
+		}
+		
+		public function flash(color:uint, time:Number):void
+		{
+			_originalColorTransform = _colorTransform;
+			_colorTransform = new ColorTransform();
+			_colorTransform.color = color;
+			calcFrame();
+			
+			_colorFlashing = true;
+			_colorFlashTime = time;
 		}
 	}
 }

@@ -2,6 +2,7 @@ package pcg
 {
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxU;
@@ -38,6 +39,7 @@ package pcg
 			this.addAnimation("jump_falling", [4, 5], 5);
 			this.addAnimation("jump_end", [6, 0], 5, false);
 			this.addAnimation("shooting", [7, 0], 5);
+			this.addAnimation("knocked", [8], 5, false);
 			this.width = 10;
 			this.offset.x = 3;
 		}
@@ -50,28 +52,24 @@ package pcg
 			
 			checkAnimation();
 			
-			if(!flickering)
+			if (FlxG.keys.LEFT) 
+				velocity.x = -WALK_SPEED;
+			else if (FlxG.keys.RIGHT)
+				velocity.x = WALK_SPEED;
+			else 
+				velocity.x = 0;
+			if (FlxG.keys.justPressed("UP") || FlxG.keys.justPressed("B"))
 			{
-				if (FlxG.keys.LEFT) 
-					velocity.x = -WALK_SPEED;
-				else if (FlxG.keys.RIGHT)
-					velocity.x = WALK_SPEED;
-				else 
-					velocity.x = 0;
-				if (FlxG.keys.justPressed("UP") || FlxG.keys.justPressed("B"))
-				{
-					jump();
-				}
+				jump();
+			}
+			
+			if(FlxG.keys.X)
+			{
+				//dropBomb();
+				var fired:Boolean = _weapon.fire(x, y, facing);
 				
-				if(FlxG.keys.X)
-				{
-					//dropBomb();
-					var fired:Boolean = _weapon.fire(x, y, facing);
-					
-					if(fired && velocity.x == 0 && !_jumping && _justLandedTimer == 0)
-						play("shooting");
-					
-				}
+				if(fired && velocity.x == 0 && !_jumping && _justLandedTimer == 0)
+					play("shooting");
 			}
 			
 			_justLandedTimer = Math.max(0, _justLandedTimer -= FlxG.elapsed);
@@ -80,7 +78,7 @@ package pcg
 			{
 				_jumping = false;
 				play("jump_end", true);
-				_justLandedTimer = 0.2;
+				_justLandedTimer = 0.1;
 			}
 				
 			velocity.y += 13;
@@ -120,6 +118,18 @@ package pcg
 				_jumping = true;
 			}
 			
+		}
+		
+		public function hit(enemy:Enemy):void
+		{	
+			flicker(1);
+			flash(0xff0000, 0.2);
+			FlxG.shake(0.03, 0.08);
+		}
+		
+		private function knockBack(direction:uint, force:uint):void
+		{
+			velocity.make((direction == FlxObject.LEFT ? -1 : 1) * force, -100);
 		}
 
 		public function get bombs():FlxGroup

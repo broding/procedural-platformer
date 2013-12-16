@@ -2,7 +2,9 @@ package pcg.arearecipes
 {
 	import pcg.Area;
 	import pcg.Edge;
+	import pcg.arearules.AddEnemySpawnerRule;
 	import pcg.arearules.BorderRocksRule;
+	import pcg.arearules.NeighboursToRockRule;
 	import pcg.arearules.RuleItterator;
 	import pcg.arearules.structures.TransformationRule;
 	import pcg.arearules.structures.Transformations;
@@ -21,7 +23,8 @@ package pcg.arearecipes
 			transformRule.applyTransformations(area);
 			
 			var itterator:RuleItterator = new RuleItterator();
-			//itterator.addRule(new NeighboursToRockRule(2, 6));
+			//itterator.addRule(new NeighboursToRockRule(1, 5));
+			itterator.addRule(new AddEnemySpawnerRule());
 			itterator.addRule(new BorderRocksRule());
 			
 			area = itterator.itterate(area);

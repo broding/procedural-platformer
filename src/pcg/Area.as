@@ -48,7 +48,9 @@ package pcg
 				
 				for (var x:int = 0; x < width; x++)
 				{
-					_map[y][x] = generator.getTile(x, y, width, height);
+					var tile:int = generator.getTile(x, y, width, height);
+					
+					_map[y][x] = tile;
 				}
 			}
 		}
