@@ -61,7 +61,7 @@ package pcg
 				velocity.x = WALK_SPEED;
 			else 
 				velocity.x = 0;
-			if (FlxG.keys.justPressed("UP") || FlxG.keys.justPressed("B"))
+			if (FlxG.keys.justPressed("B"))
 			{
 				jump();
 			}
@@ -71,12 +71,9 @@ package pcg
 				if((FlxG.keys.UP || FlxG.keys.DOWN))
 					_climbingLadder = true;
 				
+				_jumping = false;
+				
 				player.velocity.y = player.velocity.y / 1.3;
-
-				if(_climbingLadder)
-				{
-					//player.x = ladder.x;
-				}
 				
 				if(FlxG.keys.UP)
 					player.velocity.y = -WALK_SPEED;
@@ -88,7 +85,6 @@ package pcg
 			
 			if(FlxG.keys.X)
 			{
-				//dropBomb();
 				var fired:Boolean = _weapon.fire(x, y, facing);
 				
 				if(fired && velocity.x == 0 && !_jumping && _justLandedTimer == 0)

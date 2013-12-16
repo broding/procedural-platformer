@@ -113,12 +113,7 @@ package pcg
 			if(FlxG.camera.zoom == 2 || FlxG.camera.zoom == 1)
 			{
 				FlxG.camera.follow(_player);
-			}
-			
-			if(FlxG.keys.justPressed("SPACE"))
-			{
-				initLevel();
-			}
+			}	
 			
 			Game.emitBatchedGameEvents();
 			

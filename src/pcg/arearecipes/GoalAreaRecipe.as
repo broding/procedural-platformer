@@ -14,7 +14,7 @@ package pcg.arearecipes
 			var area:pcg.Area = new pcg.Area(new SideTileGenerator(edges), Area.WIDTH, Area.HEIGHT, edges);
 			
 			var itterator:RuleItterator = new RuleItterator();
-			itterator.addRule(new NeighboursToRockRule(3, 5));
+			itterator.addRule(new NeighboursToRockRule(2, 5));
 			itterator.addRule(new BorderRocksRule());
 			
 			area = itterator.itterate(area);
