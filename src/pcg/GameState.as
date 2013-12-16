@@ -8,6 +8,7 @@ package pcg
 	import org.flixel.FlxRect;
 	import org.flixel.FlxState;
 	import org.flixel.FlxTilemap;
+	import org.flixel.FlxU;
 	
 	import pcg.levelgenerator.RandomLevelGenerator;
 
@@ -19,14 +20,19 @@ package pcg
 	{
 		private var _gameEventListeners:Array;
 		
+		private var _director:Director;
 		private var _player:Player;
 		private var _bullets:FlxGroup;
+		private var _enemies:FlxGroup;
 		private var _level:Level;
 		private var _emitter:FlxEmitter;
 		
 		public function GameState() 
 		{
+			FlxG.visualDebug = false;
+			
 			_bullets = new FlxGroup();
+			_enemies = new FlxGroup();
 		}
 		
 		override public function create():void
@@ -59,13 +65,14 @@ package pcg
 				remove(_level.ladders);
 				remove(_player);
 				remove(_player.bombs);
+				remove(_enemies);
 				remove(_level.fluidManager);
 				this._gameEventListeners.length = 0;
 			}
 			
 			_player = new Player();
 			_player.x = 300;
-			_player.y = 100;
+			_player.y = 80;
 			
 			_level = new Level(new RandomLevelGenerator());
 			
@@ -75,9 +82,15 @@ package pcg
 			add(_level.decorationMaps);
 			add(_emitter);
 			add(_level.ladders);
+			add(_enemies);
 			add(_player);
 			add(_player.bombs);
 			add(_bullets);
+			
+			_director = new Director(_player);
+			
+			Game.player = _player;
+			Game.director = _director;
 			
 			addGameEventListener(_level);
 			addGameEventListener(_player);
@@ -87,10 +100,15 @@ package pcg
 		{
 			super.update();
 			
+			_director.update();
+			
 			FlxG.collide(_player, _level.collideMap);
+			FlxG.collide(_enemies, _level.collideMap);
 			FlxG.collide(_player.bombs, _level.collideMap);
 			FlxG.collide(_emitter, _level.collideMap);
 			FlxG.collide(_bullets, _level.collideMap, bulletTilemapCollide);
+			FlxG.overlap(_bullets, _enemies, bulletEnemyCollide);
+			FlxG.overlap(_player, _enemies, playerEnemyCollide);
 			
 			if(FlxG.camera.zoom == 2 || FlxG.camera.zoom == 1)
 			{
@@ -102,14 +120,41 @@ package pcg
 				initLevel();
 			}
 			
+			Game.emitBatchedGameEvents();
+			
+		}
+		
+		private function playerEnemyCollide(player:Player, enemy:Enemy):void
+		{
+			if(!enemy.alive || player.flickering)
+				return;
+			
+			player.hit(enemy);
 		}
 		
 		private function bulletTilemapCollide(bullet:Bullet, tilemap:FlxTilemap):void
 		{
 			bullet.kill();
+			_bullets.remove(bullet);
+			
 			_emitter.x = bullet.x + (bullet.facing == FlxObject.RIGHT ? bullet.width : 0);
 			_emitter.y = bullet.y;
 			_emitter.start(true, 0.1, 0, 10);
+		}
+		
+		private function bulletEnemyCollide(bullet:Bullet, enemy:Enemy):void
+		{
+			if(!enemy.alive)
+				return;
+			
+			bullet.kill();
+			_bullets.remove(bullet);
+			
+			enemy.hit(bullet);
+			
+			_emitter.x = bullet.x + (bullet.facing == FlxObject.RIGHT ? bullet.width : 0);
+			_emitter.y = bullet.y;
+			_emitter.start(true, 0.1, 0, 2);
 		}
 		
 		private function addGameEventListener(listener:GameEventListener):void
@@ -134,6 +179,14 @@ package pcg
 				
 				case GameEvent.BULLET_FIRED:
 					_bullets.add(event.bullet);
+					break;
+				
+				case GameEvent.ENEMY_SPAWNED:
+					_enemies.add(event.enemy);
+					break;
+				
+				case GameEvent.ENEMY_KILLED:
+					_enemies.remove(event.enemy);
 					break;
 			}
 			

@@ -6,11 +6,21 @@ package pcg
 	{
 		[Embed(source = "../../assets/bullet_big.png")] private var _bigImage:Class;
 		
-		public function Bullet()
+		private var _weapon:Weapon;
+		
+		public function Bullet(weapon:Weapon)
 		{
+			_weapon = weapon;
+			
 			loadGraphic(_bigImage, false, true);
 			
 			kill();
 		}
+
+		public function get weapon():Weapon
+		{
+			return _weapon;
+		}
+
 	}
 }

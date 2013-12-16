@@ -25,7 +25,8 @@ package pcg.arearules.structures
 				for(var i:int = 0; i < group.transformations.length * 2; i++)
 				{
 					// apply random transformation
-					applyTransformation(group.transformations[Math.floor(Math.random() * group.transformations.length)], area);
+					var index:int = Math.floor(Math.random() * group.transformations.length);
+					applyTransformation(group.transformations[index], area);
 				}
 			}
 		}

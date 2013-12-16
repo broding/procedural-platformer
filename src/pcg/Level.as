@@ -76,7 +76,9 @@ package pcg
 			{
 				for(var y:int = 0; y < timesY; y++)
 				{
-					_background.add(new FlxSprite(x * 32, y * 32, _bgImage));
+					var bg:FlxSprite = new FlxSprite(x * 32, y * 32, _bgImage);
+					bg.scrollFactor.make(0,0);
+					_background.add(bg);
 				}
 			}
 		}
@@ -120,6 +122,8 @@ package pcg
 			while(!_fluidManager.isAllFluidStill())
 				_fluidManager.step();
 			
+			Game.tilemap = _collideMap;
+			
 		}
 		
 		private function paint(x:int, y:int):void
@@ -148,6 +152,11 @@ package pcg
 					break;
 				case TileType.LADDER:
 					addLadder(x,y);
+					_collideMap.setTile(x,y, 0);
+					break;
+				case TileType.ENEMYSPAWNER:
+					var enemySpawner:EnemySpawner = new EnemySpawner(x * 16, y * 16);
+					Game.director.addEnemySpawner(enemySpawner);
 					_collideMap.setTile(x,y, 0);
 					break;
 			}
