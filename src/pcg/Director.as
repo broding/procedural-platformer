@@ -28,9 +28,14 @@ package pcg
 				for each(var spawner:EnemySpawner in _enemySpawners.members)
 				{
 					var cameraTarget:FlxObject = FlxG.camera.target;
-					var distance:Number = FlxU.getDistance(new FlxPoint(spawner.x, spawner.y), new FlxPoint(cameraTarget.x, cameraTarget.y));
-					if(distance < 100)
-						spawner.spawn();
+					
+					if(cameraTarget != null)
+					{
+						var distance:Number = FlxU.getDistance(new FlxPoint(spawner.x, spawner.y), new FlxPoint(cameraTarget.x, cameraTarget.y));
+						if(distance < 100)
+							spawner.spawn();
+					}
+					
 				}
 				
 				_updateTimer = 1;
