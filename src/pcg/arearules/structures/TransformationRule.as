@@ -26,7 +26,12 @@ package pcg.arearules.structures
 				{
 					// apply random transformation
 					var index:int = Math.floor(Math.random() * group.transformations.length);
-					applyTransformation(group.transformations[index], area);
+					trace("index: " + index);
+					
+					if(applyTransformation(group.transformations[index], area)){;
+						trace(area);
+						trace("\n");
+					}
 				}
 			}
 		}
@@ -40,6 +45,7 @@ package pcg.arearules.structures
 					if(checkSubmap(transformation, area, x, y))
 					{
 						applyResultTransformation(transformation, area, x, y);
+						return true;
 					}
 				}
 			}
