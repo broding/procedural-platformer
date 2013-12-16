@@ -43,6 +43,7 @@ package pcg
 			_areaSize = new FlxPoint(Area.WIDTH, Area.HEIGHT);
 			_levelGenerator = levelGenerator;
 			_ladders = new FlxGroup();
+			Game.ladders = _ladders;
 			
 			_fluidManager = new FluidManager();
 			

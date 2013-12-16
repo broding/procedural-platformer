@@ -1,5 +1,6 @@
 package pcg
 {
+	import org.flixel.FlxGroup;
 	import org.flixel.FlxTilemap;
 
 	public class Game
@@ -10,6 +11,7 @@ package pcg
 		private static var _tilemap:FlxTilemap;
 		private static var _director:Director;
 		private static var _player:Player;
+		private static var _ladders:FlxGroup;
 		
 		public static function emitGameEvent(event:GameEvent):void
 		{
@@ -63,6 +65,16 @@ package pcg
 		public static function set tilemap(value:FlxTilemap):void
 		{
 			_tilemap = value;
+		}
+
+		public static function get ladders():FlxGroup
+		{
+			return _ladders;
+		}
+
+		public static function set ladders(value:FlxGroup):void
+		{
+			_ladders = value;
 		}
 
 

@@ -22,6 +22,8 @@ package pcg
 		
 		private var _jumping:Boolean = false;
 		private var _jumpedAgo:Number = 0;
+		private var _climbingLadder:Boolean;
+		
 		private var _bombs:FlxGroup;
 		private var _weapon:Weapon;
 		
@@ -31,6 +33,7 @@ package pcg
 		{
 			_bombs = new FlxGroup();
 			_weapon = new Weapon();
+			_climbingLadder = false;
 			
 			this.loadGraphic(_playerImage, true, true, 16, 16);
 			this.addAnimation("idle", [0], 10);
@@ -63,6 +66,26 @@ package pcg
 				jump();
 			}
 			
+			FlxG.overlap(this, Game.ladders, function(player:Player, ladder:Ladder):void
+			{
+				if((FlxG.keys.UP || FlxG.keys.DOWN))
+					_climbingLadder = true;
+				
+				player.velocity.y = player.velocity.y / 1.3;
+
+				if(_climbingLadder)
+				{
+					//player.x = ladder.x;
+				}
+				
+				if(FlxG.keys.UP)
+					player.velocity.y = -WALK_SPEED;
+				else if(FlxG.keys.DOWN)
+					player.velocity.y = WALK_SPEED;
+			});
+			
+			
+			
 			if(FlxG.keys.X)
 			{
 				//dropBomb();
@@ -81,7 +104,10 @@ package pcg
 				_justLandedTimer = 0.1;
 			}
 				
-			velocity.y += 13;
+			if(!_climbingLadder)
+				velocity.y += 13;
+			
+			_climbingLadder = false;
 		}
 		
 		private function dropBomb():void

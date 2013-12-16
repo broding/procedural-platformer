@@ -64,11 +64,6 @@ package pcg
 			}
 			
 			add(_healthBar);
-			
-			this.addAnimationCallback(function(Name:String, Frame:uint, FrameIndex:uint):void
-			{
-				trace("animation: " + Name);
-			});
 		}
 		
 		override public function update():void 

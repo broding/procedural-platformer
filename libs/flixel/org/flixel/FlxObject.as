@@ -5,6 +5,7 @@ package org.flixel
 	import flash.geom.Point;
 	
 	import org.flixel.FlxBasic;
+	import org.flixel.plugin.photonstorm.FlxGradient;
 	
 	/**
 	 * This is the base class for most of the display objects (<code>FlxSprite</code>, <code>FlxText</code>, etc).
@@ -687,7 +688,7 @@ package org.flixel
 				var results:Boolean = false;
 				var i:uint = 0;
 				var members:Array = (ObjectOrGroup as FlxGroup).members;
-				while(i < length)
+				while(i < (ObjectOrGroup as FlxGroup).length)
 				{
 					if(overlaps(members[i++],InScreenSpace,Camera))
 						results = true;
