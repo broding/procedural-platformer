@@ -41,7 +41,7 @@ package pcg
 			this._type = enemyType;
 			this.loadGraphic(_playerImage, true, true, 16, 16);
 			this.addAnimation("idle", [0], 10);
-			this.addAnimation("walk", [0, 1, 0, 2], 7);
+			//this.addAnimation("walk", [0, 1, 0, 2], 7);
 			this.addAnimation("jump", [3], 3, false);
 			this.addAnimation("jump_falling", [4, 5], 5);
 			this.addAnimation("jump_end", [6, 0], 5, false);
