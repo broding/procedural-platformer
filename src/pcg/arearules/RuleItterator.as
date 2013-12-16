@@ -34,7 +34,7 @@ package pcg.arearules
 					{
 						for (var y:int = 0; y < map.height; y++)
 						{
-							newMap.setTile(rules[j].applyRule(x, y, map), x, y);
+							newMap.setTile(rules[j].applyRule(x, y, map).toString(), x, y);
 						}
 					}
 					
