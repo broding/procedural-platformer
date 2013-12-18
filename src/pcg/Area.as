@@ -21,10 +21,10 @@ package pcg
 		public static const BOTTOM_ROCK:int = 4;
 		public static const SINGLE_ROCK:int = 5;
 		
-		public static const ROCK_CEILING:int = 10;
-		public static const ROCK_FLOOR:int = 11;
-		public static const ROCK_FLOOR2:int = 12;
-		public static const HANGING_GRASS:int = 13;
+		public static const ROCK_CEILING:int = 25;
+		public static const ROCK_FLOOR:int = 26;
+		public static const ROCK_FLOOR2:int = 27;
+		public static const HANGING_GRASS:int = 28;
 
 		private var _x:int;
 		private var _y:int;

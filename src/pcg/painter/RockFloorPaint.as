@@ -12,7 +12,7 @@ package pcg.painter
 	{
 		public function applyPaint(x:int, y:int, map:FlxTilemap, originalTile:uint):int 
 		{
-			if (Area.isSolidTile(map.getTile(x, y + 1)) && !Area.isSolidTile(map.getTile(x, y)))
+			if (Area.isSolidTile(map.getTile(x, y + 1)) && !Area.isSolidTile(map.getTile(x, y)) && Math.random() * 100 <= 30)
 				return Math.random() > 0.5 ? Area.ROCK_FLOOR : Area.ROCK_FLOOR2;
 			else
 				return originalTile;

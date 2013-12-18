@@ -9,6 +9,10 @@ package pcg
 	import pcg.arearules.structures.Transformations;
 	import pcg.levelgenerator.LevelGenerator;
 	import pcg.loader.Loader;
+	import pcg.painter.BottomBlockPaint;
+	import pcg.painter.HangingGrassPaint;
+	import pcg.painter.Painter;
+	import pcg.painter.RockFloorPaint;
 	import pcg.tilegenerators.EmptyTileGenerator;
 	import pcg.tilerecipes.Map;
 	import pcg.tilerecipes.TileRecipe;
@@ -28,9 +32,8 @@ package pcg
 		private var _recipesLibrary:TileRecipes;
 		private var _levelGenerator:LevelGenerator;
 		private var _areas:Vector.<Area>;
-		private var _collideMaps:FlxGroup;
 		private var _collideMap:FlxTilemap;
-		private var _decorationMaps:FlxGroup;
+		private var _decorationMap:FlxTilemap;
 		private var _fluidManager:FluidManager;
 		private var _background:FlxGroup;
 		
@@ -47,12 +50,12 @@ package pcg
 			
 			_fluidManager = new FluidManager();
 			
-			_collideMap = new FlxTilemap();
 			var emptyArea:Area = new Area(new EmptyTileGenerator(), 400, 400, new Edge());
-			_collideMap.loadMap(emptyArea.toString(), _tilesetImage, 16, 16);
 			
-			_collideMaps = new FlxGroup();
-			_decorationMaps = new FlxGroup();
+			_collideMap = new FlxTilemap();
+			_collideMap.loadMap(emptyArea.toString(), _tilesetImage, 16, 16);
+			_decorationMap = new FlxTilemap();
+			_decorationMap.loadMap(emptyArea.toString(), _tilesetImage, 16, 16);
 			
 			_map = new Map(5,5);
 			var startRecipe:TileRecipe = new TileRecipe("S", new StartAreaRecipe(), TileRecipe.RIGHT);
@@ -88,7 +91,7 @@ package pcg
 		{	
 			for(var i:int = 0; i < 80; i++)
 			{
-				var rule:TileRule = TileRules.getRule(Math.floor(Math.random() * TileRules.totalRules));
+				var rule:TileRule = TileRules.getRule(Math.floor(Game.random.nextDoubleRange(0,1) * TileRules.totalRules));
 				rule.applyRule(_map);
 			}
 		}
@@ -119,11 +122,18 @@ package pcg
 				}
 			}
 			
+			var painter:Painter = new Painter();
+			painter.addPaint(new HangingGrassPaint());
+			painter.addPaint(new RockFloorPaint());
+			painter.paint(_decorationMap, _collideMap);
+			
 			// process till all fluid is still
 			while(!_fluidManager.isAllFluidStill())
 				_fluidManager.step();
 			
 			Game.tilemap = _collideMap;
+			
+			_loaded = true;
 			
 		}
 		
@@ -176,7 +186,7 @@ package pcg
 		
 		private function addLadder(x:int, y:int):void
 		{
-			var ladder:Ladder = new Ladder();
+			var ladder:Ladder = new Ladder(true);
 			ladder.x = x * 16;
 			ladder.y = y * 16;
 			ladders.add(ladder);
@@ -213,11 +223,6 @@ package pcg
 			return _collideMap;
 		}
 
-		public function get decorationMaps():FlxGroup
-		{
-			return _decorationMaps;
-		}
-
 		public function get areaSize():FlxPoint
 		{
 			return _areaSize;
@@ -236,6 +241,16 @@ package pcg
 		public function get background():FlxGroup
 		{
 			return _background;
+		}
+
+		public function get loaded():Boolean
+		{
+			return _loaded;
+		}
+
+		public function get decorationMap():FlxTilemap
+		{
+			return _decorationMap;
 		}
 
 		

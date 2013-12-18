@@ -10,9 +10,9 @@ package pcg.painter
 	 */
 	public class HangingGrassPaint implements Paint
 	{
-		private var _chance:uint = 30;
+		private var _chance:uint;
 		
-		public function HangingGrassPaint(chance:uint = 20)
+		public function HangingGrassPaint(chance:uint = 30)
 		{
 			this._chance = chance;
 		}

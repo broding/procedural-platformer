@@ -10,8 +10,8 @@ package pcg
 	{
 		public function Main():void 
 		{
-			//super(2320, 2240, GameState, 0.3, 60, 60);
-			super(320, 240, GameState, 2, 60, 60);
+			super(2320, 2240, LoadState, 0.3, 60, 60);
+			//super(320, 240, LoadState, 2, 60, 60);
 		}
 		
 	}

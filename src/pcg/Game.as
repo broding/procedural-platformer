@@ -13,6 +13,8 @@ package pcg
 		private static var _player:Player;
 		private static var _ladders:FlxGroup;
 		
+		private static var _random:PseudoRandom;
+		
 		public static function emitGameEvent(event:GameEvent):void
 		{
 			if(_events == null)
@@ -36,12 +38,10 @@ package pcg
 
 		public static function get director():Director
 		{	
+			if(_director == null)
+				_director = new Director();
+			
 			return _director;
-		}
-		
-		public static function set director(value:Director):void
-		{
-			_director = value;
 		}
 
 		public static function get player():Player
@@ -75,6 +75,17 @@ package pcg
 		public static function set ladders(value:FlxGroup):void
 		{
 			_ladders = value;
+		}
+
+		public static function get random():PseudoRandom
+		{
+			if(_random == null)
+			{
+				_random = new PseudoRandom();
+				_random.seed = Math.random();
+			}
+			
+			return _random;
 		}
 
 

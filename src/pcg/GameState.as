@@ -20,17 +20,17 @@ package pcg
 	{
 		private var _gameEventListeners:Array;
 		
-		private var _director:Director;
 		private var _player:Player;
 		private var _bullets:FlxGroup;
 		private var _enemies:FlxGroup;
 		private var _level:Level;
-		private var _emitter:FlxEmitter;
+		private var _bulletParticles:FlxEmitter;
 		
-		public function GameState() 
+		public function GameState(level:Level) 
 		{
 			FlxG.visualDebug = false;
 			
+			_level = level;
 			_bullets = new FlxGroup();
 			_enemies = new FlxGroup();
 		}
@@ -43,69 +43,47 @@ package pcg
 			Game.emitEventCallback = emitGameEvent;
 			_gameEventListeners = new Array(); 
 			
-			_emitter = new FlxEmitter(0, 0, 100);
-			_emitter.gravity = 500;
+			_bulletParticles = new FlxEmitter(0, 0, 100);
+			_bulletParticles.gravity = 500;
 			for(var i:int = 0; i < 100; i ++)
 			{
 				var particle:FlxParticle = new FlxParticle();
 				particle.makeGraphic(Math.random() * 2 + 3, Math.random() * 2 + 3, 0xffffffff - Math.random() * 40);
-				_emitter.add(particle);
-			}
-			
-			initLevel();
-		}
-		
-		private function initLevel():void
-		{	
-			if(_level != null)
-			{
-				remove(_level.background);
-				remove(_level.collideMap);
-				remove(_level.decorationMaps);
-				remove(_level.ladders);
-				remove(_player);
-				remove(_player.bombs);
-				remove(_enemies);
-				remove(_level.fluidManager);
-				this._gameEventListeners.length = 0;
+				_bulletParticles.add(particle);
 			}
 			
 			_player = new Player();
 			_player.x = 300;
 			_player.y = 80;
 			
-			_level = new Level(new RandomLevelGenerator());
+			Game.director.player = _player;
+			Game.player = _player;
+			
+			addGameEventListener(_level);
+			addGameEventListener(_player);
 			
 			add(_level.background);
 			add(_level.collideMap);
+			add(_level.decorationMap);
 			add(_level.fluidManager);
-			add(_level.decorationMaps);
-			add(_emitter);
+			add(_bulletParticles);
 			add(_level.ladders);
 			add(_enemies);
 			add(_player);
 			add(_player.bombs);
 			add(_bullets);
-			
-			_director = new Director(_player);
-			
-			Game.player = _player;
-			Game.director = _director;
-			
-			addGameEventListener(_level);
-			addGameEventListener(_player);
 		}
 		
 		override public function update():void 
 		{
 			super.update();
 			
-			_director.update();
+			Game.director.update();
 			
 			FlxG.collide(_player, _level.collideMap);
 			FlxG.collide(_enemies, _level.collideMap);
 			FlxG.collide(_player.bombs, _level.collideMap);
-			FlxG.collide(_emitter, _level.collideMap);
+			FlxG.collide(_bulletParticles, _level.collideMap);
 			FlxG.collide(_bullets, _level.collideMap, bulletTilemapCollide);
 			FlxG.overlap(_bullets, _enemies, bulletEnemyCollide);
 			FlxG.overlap(_player, _enemies, playerEnemyCollide);
@@ -132,9 +110,9 @@ package pcg
 			bullet.kill();
 			_bullets.remove(bullet);
 			
-			_emitter.x = bullet.x + (bullet.facing == FlxObject.RIGHT ? bullet.width : 0);
-			_emitter.y = bullet.y;
-			_emitter.start(true, 0.1, 0, 10);
+			_bulletParticles.x = bullet.x + (bullet.facing == FlxObject.RIGHT ? bullet.width : 0);
+			_bulletParticles.y = bullet.y;
+			_bulletParticles.start(true, 0.1, 0, 10);
 		}
 		
 		private function bulletEnemyCollide(bullet:Bullet, enemy:Enemy):void
@@ -147,9 +125,9 @@ package pcg
 			
 			enemy.hit(bullet);
 			
-			_emitter.x = bullet.x + (bullet.facing == FlxObject.RIGHT ? bullet.width : 0);
-			_emitter.y = bullet.y;
-			_emitter.start(true, 0.1, 0, 2);
+			_bulletParticles.x = bullet.x + (bullet.facing == FlxObject.RIGHT ? bullet.width : 0);
+			_bulletParticles.y = bullet.y;
+			_bulletParticles.start(true, 0.1, 0, 2);
 		}
 		
 		private function addGameEventListener(listener:GameEventListener):void
@@ -167,9 +145,9 @@ package pcg
 			switch(event.type)
 			{
 				case GameEvent.EXPLOSION:
-					_emitter.x = event.position.x;
-					_emitter.y = event.position.y;
-					_emitter.start(true, 1, 0, 2);
+					_bulletParticles.x = event.position.x;
+					_bulletParticles.y = event.position.y;
+					_bulletParticles.start(true, 1, 0, 2);
 					break;
 				
 				case GameEvent.BULLET_FIRED:

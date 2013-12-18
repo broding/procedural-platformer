@@ -12,10 +12,9 @@ package pcg
 		private var _enemySpawners:FlxGroup;
 		private var _updateTimer:Number;
 		
-		public function Director(player:Player)
+		public function Director()
 		{
 			_enemySpawners = new FlxGroup();
-			_player = player;
 			_updateTimer = 1;
 		}
 		
@@ -49,5 +48,11 @@ package pcg
 		{
 			_enemySpawners.add(spawner);
 		}
+
+		public function set player(value:Player):void
+		{
+			_player = value;
+		}
+
 	}
 }
