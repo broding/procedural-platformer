@@ -3,6 +3,7 @@ package pcg.tilerecipes
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.DataLoader;
 	import com.greensock.loading.LoaderMax;
+	import pcg.arearecipes.RandomAreaRecipe;
 	
 	import pcg.arearecipes.AreaRecipe;
 	import pcg.arearecipes.CorridorAreaRecipe;
@@ -75,6 +76,9 @@ package pcg.tilerecipes
 					break;
 				case "OpenAreaRecipe":
 					return new OpenAreaRecipe();
+					break;
+				case "RandomAreaRecipe":
+					return new RandomAreaRecipe();
 					break;
 			}
 			

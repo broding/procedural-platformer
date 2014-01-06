@@ -5,3 +5,4 @@ N,CorridorAreaRecipe
 *,EmptyAreaRecipe
 W,WaterAreaRecipe
 O,OpenAreaRecipe
+R,RandomAreaRecipe

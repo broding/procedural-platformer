@@ -49,7 +49,7 @@ package pcg.painter
 			}
 		}
 		
-		public function repaint(original:Area, rect:FlxRect):Area
+		/*public function repaint(original:Area, rect:FlxRect):Area
 		{
 			for (var j:int = 0; j < paints.length; j++)
 			{
@@ -63,7 +63,7 @@ package pcg.painter
 			}
 			
 			return original;
-		}
+		}*/
 		
 	}
 
