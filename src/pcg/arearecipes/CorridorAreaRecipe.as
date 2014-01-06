@@ -2,10 +2,11 @@ package pcg.arearecipes
 {
 	import pcg.Area;
 	import pcg.Edge;
+	import pcg.arearules.AddBarrelRule;
 	import pcg.arearules.AddEnemySpawnerRule;
 	import pcg.arearules.BorderRocksRule;
-	import pcg.arearules.NeighboursToRockRule;
 	import pcg.arearules.RuleItterator;
+	import pcg.arearules.SideOpenerRule;
 	import pcg.arearules.structures.TransformationRule;
 	import pcg.arearules.structures.Transformations;
 	import pcg.tilegenerators.CorridorTileGenerator;
@@ -25,6 +26,7 @@ package pcg.arearecipes
 			var itterator:RuleItterator = new RuleItterator();
 			//itterator.addRule(new NeighboursToRockRule(1, 5));
 			itterator.addRule(new AddEnemySpawnerRule());
+			itterator.addRule(new AddBarrelRule());
 			itterator.addRule(new BorderRocksRule());
 			
 			area = itterator.itterate(area);

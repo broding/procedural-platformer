@@ -8,6 +8,7 @@ package pcg
 		public static const BULLET_FIRED:int = 1;
 		public static const ENEMY_SPAWNED:int = 2;
 		public static const ENEMY_KILLED:int = 3;
+		public static const PLAYER_KILLED:int = 4;
 		
 		public var position:FlxPoint;
 		public var radius:uint;

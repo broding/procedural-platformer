@@ -2,6 +2,7 @@ package pcg.arearecipes
 {
 	import pcg.Area;
 	import pcg.Edge;
+	import pcg.arearules.AddDoorRule;
 	import pcg.arearules.BorderRocksRule;
 	import pcg.arearules.NeighboursToRockRule;
 	import pcg.arearules.RuleItterator;
@@ -16,6 +17,7 @@ package pcg.arearecipes
 			var itterator:RuleItterator = new RuleItterator();
 			itterator.addRule(new NeighboursToRockRule(2, 5));
 			itterator.addRule(new BorderRocksRule());
+			itterator.addRule(new AddDoorRule(false));
 			
 			area = itterator.itterate(area);
 			

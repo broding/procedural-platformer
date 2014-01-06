@@ -12,6 +12,9 @@ package pcg
 			
 			this.addAnimation("idle", [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0], 10);
 			this.addAnimation("walk", [2, 3], 7);
+			
+			this.width = 10;
+			this.offset.x = 3;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package pcg.arearules.structures
 {
 	import pcg.Area;
+	import pcg.Game;
 	
 
 	public class TransformationRule
@@ -25,7 +26,7 @@ package pcg.arearules.structures
 				for(var i:int = 0; i < group.transformations.length * 2; i++)
 				{
 					// apply random transformation
-					var index:int = Math.floor(Math.random() * group.transformations.length);
+					var index:int = Math.floor(Game.random.nextDoubleRange(0,1) * group.transformations.length);
 					
 					applyTransformation(group.transformations[index], area)
 				}

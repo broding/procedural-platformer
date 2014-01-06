@@ -32,6 +32,7 @@ package pcg
 		override public function update():void 
 		{
 			return;
+			
 			super.update();
 			
 			_stepTimer += FlxG.elapsed;
@@ -47,11 +48,11 @@ package pcg
 		{
 			_map = map;
 			
-			var start:FlxPoint = new FlxPoint(Math.floor(Math.random() * map.width), Math.floor(Math.random() * map.height));
+			var start:FlxPoint = new FlxPoint(Math.floor(Game.random.nextDouble() * map.width), Math.floor(Game.random.nextDouble() * map.height));
 			
 			while (Area.isSolidTile(map.getTile(start.x, start.y)))
 			{
-				start = new FlxPoint(Math.floor(Math.random() * map.width), Math.floor(Math.random() * map.height));
+				start = new FlxPoint(Math.floor(Game.random.nextDouble() * map.width), Math.floor(Game.random.nextDouble() * map.height));
 			}
 		}
 		
@@ -139,7 +140,7 @@ package pcg
 		private function flowSideways(fluid:Fluid):void
 		{
 			if (fluid.liquidVelocity.x == 0)
-				fluid.liquidVelocity.x = Math.random() > 0.5 ? -1 : 1; 
+				fluid.liquidVelocity.x = Game.random.nextDouble() > 0.5 ? -1 : 1; 
 				
 			if(!isValidTile(fluid.x + fluid.liquidVelocity.x * 16, fluid.y))
 			{

@@ -30,7 +30,7 @@ package pcg
 			
 			if(_spawnTimer <= 0)
 			{
-				var enemy:Enemy = new Worm();
+				var enemy:Enemy = new Bee();
 				enemy.x = x;
 				enemy.y = y;
 				var event:GameEvent = new GameEvent(GameEvent.ENEMY_SPAWNED);

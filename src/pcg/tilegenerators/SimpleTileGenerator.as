@@ -8,7 +8,7 @@ package pcg.tilegenerators
 	{
 		public function getTile(x:int, y:int, width:int, height:int):int
 		{
-			return Math.random() * 2;
+			return Game.random.nextDoubleRange(0,1) * 2;
 		}
 	}
 

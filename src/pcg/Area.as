@@ -21,10 +21,10 @@ package pcg
 		public static const BOTTOM_ROCK:int = 4;
 		public static const SINGLE_ROCK:int = 5;
 		
-		public static const ROCK_CEILING:int = 25;
-		public static const ROCK_FLOOR:int = 26;
-		public static const ROCK_FLOOR2:int = 27;
-		public static const HANGING_GRASS:int = 28;
+		public static const ROCK_CEILING:int = 45;
+		public static const ROCK_FLOOR:int = 46;
+		public static const ROCK_FLOOR2:int = 47;
+		public static const HANGING_GRASS:int = 48;
 
 		private var _x:int;
 		private var _y:int;
@@ -64,7 +64,7 @@ package pcg
 					break;
 				
 				case "X":
-					return Math.random() > 0.5 ? 0 : 1;
+					return Game.random.nextDoubleRange(0,1) > 0.5 ? 0 : 1;
 					break;
 			}
 			

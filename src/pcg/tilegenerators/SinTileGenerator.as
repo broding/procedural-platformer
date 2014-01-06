@@ -6,8 +6,8 @@ package pcg.tilegenerators
 	{	
 		public function getTile(x:int, y:int, width:int, height:int):int
 		{
-			var xRandom:Number = 1 + Math.random() * 3;
-			var yRandom:Number = 1 + Math.random() * 3;
+			var xRandom:Number = 1 + Game.random.nextDoubleRange(0,1) * 3;
+			var yRandom:Number = 1 + Game.random.nextDoubleRange(0,1) * 3;
 			
 			var value:Number = Math.sin(x * xRandom) + Math.sin(y * yRandom);
 			

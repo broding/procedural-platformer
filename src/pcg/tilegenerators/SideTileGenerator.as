@@ -1,6 +1,7 @@
 package pcg.tilegenerators
 {
 	import pcg.Edge;
+	import pcg.Game;
 
 	public class SideTileGenerator implements TileGenerator
 	{
@@ -26,7 +27,7 @@ package pcg.tilegenerators
 			else if(y >= height / 2 && _edges.down)
 				lerpY = 0;
 			
-			return Math.random() * lerpX * 6 + Math.random() * 6 * lerpY;
+			return Game.random.nextDoubleRange(0,1) * lerpX * 6 + Game.random.nextDoubleRange(0,1) * 6 * lerpY;
 		}
 		
 		

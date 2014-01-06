@@ -9,7 +9,6 @@ package pcg
 	import pcg.arearules.structures.Transformations;
 	import pcg.levelgenerator.LevelGenerator;
 	import pcg.loader.Loader;
-	import pcg.painter.BottomBlockPaint;
 	import pcg.painter.HangingGrassPaint;
 	import pcg.painter.Painter;
 	import pcg.painter.RockFloorPaint;
@@ -29,12 +28,15 @@ package pcg
 		
 		private var _map:Map;
 		private var _ladders:FlxGroup;
+		private var _barrels:FlxGroup;
+		private var _torches:FlxGroup;
+		private var _spawnDoor:Door;
+		private var _goalDoor:Door;
 		private var _recipesLibrary:TileRecipes;
 		private var _levelGenerator:LevelGenerator;
 		private var _areas:Vector.<Area>;
 		private var _collideMap:FlxTilemap;
 		private var _decorationMap:FlxTilemap;
-		private var _fluidManager:FluidManager;
 		private var _background:FlxGroup;
 		
 		private var _loaded:Boolean;
@@ -46,18 +48,18 @@ package pcg
 			_areaSize = new FlxPoint(Area.WIDTH, Area.HEIGHT);
 			_levelGenerator = levelGenerator;
 			_ladders = new FlxGroup();
+			_barrels = new FlxGroup();
+			_torches = new FlxGroup();
 			Game.ladders = _ladders;
 			
-			_fluidManager = new FluidManager();
-			
-			var emptyArea:Area = new Area(new EmptyTileGenerator(), 400, 400, new Edge());
+			var emptyArea:Area = new Area(new EmptyTileGenerator(), 3 * Area.WIDTH, 3 * Area.HEIGHT, new Edge());
 			
 			_collideMap = new FlxTilemap();
 			_collideMap.loadMap(emptyArea.toString(), _tilesetImage, 16, 16);
 			_decorationMap = new FlxTilemap();
 			_decorationMap.loadMap(emptyArea.toString(), _tilesetImage, 16, 16);
 			
-			_map = new Map(5,5);
+			_map = new Map(3,3);
 			var startRecipe:TileRecipe = new TileRecipe("S", new StartAreaRecipe(), TileRecipe.RIGHT);
 			_map.setRecipe(startRecipe, 0, 0);
 			
@@ -111,8 +113,6 @@ package pcg
 				}
 			}
 			
-			_fluidManager.init(_collideMap);
-			
 			for (x = 0; x < _collideMap.widthInTiles; x++)
 			{
 				for (y = 0; y < _collideMap.heightInTiles; y++)
@@ -127,10 +127,6 @@ package pcg
 			painter.addPaint(new RockFloorPaint());
 			painter.paint(_decorationMap, _collideMap);
 			
-			// process till all fluid is still
-			while(!_fluidManager.isAllFluidStill())
-				_fluidManager.step();
-			
 			Game.tilemap = _collideMap;
 			
 			_loaded = true;
@@ -141,7 +137,7 @@ package pcg
 		{
 			var map:FlxTilemap = _collideMap;
 			
-			if(map.getTile(x, y) == 0 || map.getTile(x, y) > 15)
+			if(map.getTile(x, y) == 0 || map.getTile(x, y) > 35)
 				return;
 			
 			var sides:int = 
@@ -150,17 +146,13 @@ package pcg
 				(map.getTile(x+1, y) != 0 ? 2 : 0) +
 				(map.getTile(x, y+1) != 0 ? 4 : 0);
 			
-			_collideMap.setTile(x, y, sides);
+			_collideMap.setTile(x, y, sides + (Math.random() > 0.5 ? 20 : 0));
 		}
 		
 		private function processTileType(x:int, y:int):void
 		{
 			switch(_collideMap.getTile(x,y))
 			{
-				case TileType.WATER:
-					_fluidManager.addWater(x,y);
-					_collideMap.setTile(x,y, 0);
-					break;
 				case TileType.LADDER:
 					addLadder(x,y);
 					_collideMap.setTile(x,y, 0);
@@ -168,6 +160,27 @@ package pcg
 				case TileType.ENEMYSPAWNER:
 					var enemySpawner:EnemySpawner = new EnemySpawner(x * 16, y * 16);
 					Game.director.addEnemySpawner(enemySpawner);
+					_collideMap.setTile(x,y, 0);
+					break;
+				case TileType.BARREL:
+					var barrel:Barrel = new Barrel();
+					barrel.x = x * 16 + 3;
+					barrel.y = y * 16;
+					_barrels.add(barrel);
+					_collideMap.setTile(x,y, 0);
+					break;
+				case TileType.SPAWNDOOR:
+					var door:Door = new Door();
+					door.x = x * 16;
+					door.y = y * 16 - 10;
+					_spawnDoor = door;
+					_collideMap.setTile(x,y, 0);
+					break;
+				case TileType.GOALDOOR:
+					var goalDoor:Door = new Door();
+					goalDoor.x = x * 16;
+					goalDoor.y = y * 16 - 10;
+					_goalDoor = goalDoor;
 					_collideMap.setTile(x,y, 0);
 					break;
 			}
@@ -204,9 +217,36 @@ package pcg
 			}
 		}
 		
-		private function processExplosion(position:FlxPoint, radius:uint):void
+		/**
+		 * Recursive function
+		 */
+		private function processExplosion(position:FlxPoint, radius:uint, modifiedTiles:Array = null):void
 		{
-			//_areas.members[0].processExplosion(position, radius);
+			if(modifiedTiles == null)
+			{
+				var maxTiles:uint = _collideMap.widthInTiles * _collideMap.heightInTiles
+				modifiedTiles = new Array(maxTiles);
+			}
+			
+			var tileIndex:uint = position.y * _collideMap.widthInTiles + position.x;
+			
+			// early outs
+			if(radius == 0 || modifiedTiles[tileIndex] == true)
+				return;
+			
+			_collideMap.setTile(position.x, position.y, 0, true);
+			_decorationMap.setTile(position.x, position.y - 1, 0, true);
+			
+			modifiedTiles[tileIndex] = true;
+			
+			// down
+			processExplosion(new FlxPoint(position.x, position.y + 1), radius - 1, modifiedTiles);
+			// up
+			processExplosion(new FlxPoint(position.x, position.y - 1), radius - 1, modifiedTiles);
+			// left
+			processExplosion(new FlxPoint(position.x - 1, position.y), radius - 1, modifiedTiles);
+			// down
+			processExplosion(new FlxPoint(position.x + 1, position.y), radius - 1, modifiedTiles);
 		}
 		
 		public function receiveEvent(event:GameEvent):void
@@ -215,6 +255,18 @@ package pcg
 			{
 				case GameEvent.EXPLOSION:
 					processExplosion(new FlxPoint(Math.floor(event.position.x / 16), Math.floor(event.position.y / 16)), event.radius);
+					repaint(event.position.x / 16 - event.radius, event.position.y / 16 - event.radius, event.radius * 2 + 1, event.radius * 2 + 1	);
+			}
+		}
+		
+		private function repaint(startX:uint, startY:uint, width:uint, height:uint):void
+		{
+			for(var x:int = startX; x < startX + width; x++)
+			{
+				for(var y:int = startY; y < startY + height; y++)
+				{
+					paint(x, y);
+				}
 			}
 		}
 
@@ -226,11 +278,6 @@ package pcg
 		public function get areaSize():FlxPoint
 		{
 			return _areaSize;
-		}
-
-		public function get fluidManager():FluidManager
-		{
-			return _fluidManager;
 		}
 
 		public function get ladders():FlxGroup
@@ -251,6 +298,26 @@ package pcg
 		public function get decorationMap():FlxTilemap
 		{
 			return _decorationMap;
+		}
+
+		public function get barrels():FlxGroup
+		{
+			return _barrels;
+		}
+
+		public function get spawnDoor():Door
+		{
+			return _spawnDoor;
+		}
+
+		public function get goalDoor():Door
+		{
+			return _goalDoor;
+		}
+
+		public function get torches():FlxGroup
+		{
+			return _torches;
 		}
 
 		

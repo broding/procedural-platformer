@@ -14,6 +14,11 @@ package pcg
 			
 			loadGraphic(_bigImage, false, true);
 			
+			width = 8;
+			height = 8;
+			
+			offset.make(2, 0);
+			
 			kill();
 		}
 

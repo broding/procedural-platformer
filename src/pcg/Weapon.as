@@ -6,6 +6,8 @@ package pcg
 
 	public class Weapon
 	{
+		[Embed(source="../../assets/soundz/shoot.mp3")] private var _shootSound:Class;
+		
 		private var _bullets:FlxGroup;
 		
 		private var _base:WeaponBase;
@@ -16,7 +18,7 @@ package pcg
 		private var _justShot:Boolean;
 		
 		public function Weapon()
-		{
+		{	
 			_base = new WeaponBase();
 			_bullets = new FlxGroup();
 			_fireTimer = 0;
@@ -46,20 +48,36 @@ package pcg
 			_justShot = false;
 		}
 		
-		public function fire(playerX:int, playerY:int, direction:uint):Boolean
+		public function fire(playerX:int, playerY:int, direction:uint, upOrDown:uint):Boolean
 		{	
 			if(_fireTimer <= 0)
 			{
 				var event:GameEvent = new GameEvent(GameEvent.BULLET_FIRED);
 				event.bullet = _bullets.getFirstDead() as Bullet;
+				
+				if(event.bullet == null)
+					return false;
+				
 				event.bullet.x = playerX;
 				event.bullet.y = playerY + 6;
-				event.bullet.velocity.x = _stats.bulletSpeed * (direction == FlxObject.LEFT ? -1 : 1);
-				event.bullet.facing = direction;
+				event.bullet.angle = 0;
+				
+				if(upOrDown == 0)
+				{
+					event.bullet.velocity.x = _stats.bulletSpeed * (direction == FlxObject.LEFT ? -1 : 1);
+					event.bullet.facing = direction;
+				}
+				else
+				{
+					event.bullet.velocity.y = _stats.bulletSpeed * (upOrDown == FlxObject.UP ? -1 : 1);
+					event.bullet.angle = upOrDown == FlxObject.UP ? 90 : -90;
+				}
+				
 				event.bullet.revive();
 				Game.emitGameEvent(event);
-
-				FlxG.shake(0.01, 0.08);
+				
+				FlxG.play(_shootSound);
+				FlxG.shake(0.01, 0.05);
 				
 				_fireTimer = 1 / _stats.fireRate;
 				_justShot = true;

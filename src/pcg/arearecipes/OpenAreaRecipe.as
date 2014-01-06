@@ -2,6 +2,7 @@ package pcg.arearecipes
 {
 	import pcg.Area;
 	import pcg.Edge;
+	import pcg.arearules.AddDoorRule;
 	import pcg.arearules.BorderRocksRule;
 	import pcg.arearules.RuleItterator;
 	import pcg.arearules.structures.TransformationRule;

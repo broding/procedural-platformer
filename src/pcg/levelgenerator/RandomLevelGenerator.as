@@ -1,6 +1,7 @@
 package pcg.levelgenerator
 {
 	import pcg.Area;
+	import pcg.Game;
 	import pcg.arearecipes.AreaRecipeFactory;
 	import pcg.graph.Graph;
 	import pcg.graph.Node;
@@ -21,13 +22,13 @@ package pcg.levelgenerator
 			for each(var node:Node in nodes)
 			{
 				var area:Area = AreaRecipeFactory.createAreaFromGraphNode();
-				var x:int =  Math.floor((Math.random() * nodes.length)) * Area.WIDTH;
-				var y:int =  Math.floor((Math.random() * nodes.length)) * Area.HEIGHT;
+				var x:int =  Math.floor((Game.random.nextDoubleRange(0,1) * nodes.length)) * Area.WIDTH;
+				var y:int =  Math.floor((Game.random.nextDoubleRange(0,1) * nodes.length)) * Area.HEIGHT;
 				
 				while(busyAreas[x * y] != null)
 				{
-					x =  Math.floor((Math.random() * nodes.length)) * Area.WIDTH;
-					y =  Math.floor((Math.random() * nodes.length)) * Area.HEIGHT;
+					x =  Math.floor((Game.random.nextDoubleRange(0,1) * nodes.length)) * Area.WIDTH;
+					y =  Math.floor((Game.random.nextDoubleRange(0,1) * nodes.length)) * Area.HEIGHT;
 				}
 				
 				busyAreas[x*y] = true;

@@ -1,13 +1,16 @@
-package pcg
+package pcg.ai
 {
 	import org.flixel.FlxObject;
+	
+	import pcg.Enemy;
+	import pcg.Game;
 
-	public class EnemyAI
+	public class WalkAI implements EnemyAI
 	{
 		private var _enemy:Enemy;
 		private var _target:FlxObject;
 		
-		public function EnemyAI(enemy:Enemy)
+		public function WalkAI(enemy:Enemy)
 		{
 			_enemy = enemy;
 		}
@@ -39,14 +42,13 @@ package pcg
 			return false;
 		}
 
-		public function get target():FlxObject
-		{
-			return _target;
-		}
-
-		public function set target(value:FlxObject):void
+		public function setTarget(value:FlxObject):void
 		{
 			_target = value;
+		}
+		
+		public function destroy():void
+		{
 		}
 
 	}

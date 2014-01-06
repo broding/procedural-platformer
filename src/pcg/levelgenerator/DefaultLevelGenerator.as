@@ -34,9 +34,9 @@ package pcg.levelgenerator
 			{
 				var area:Area = AreaRecipeFactory.createAreaFromGraphNode();
 				
-				if(Math.random() > 0.3) // left and right
+				if(Game.random.nextDoubleRange(0,1) > 0.3) // left and right
 				{
-					var leftright:int = Boolean( Math.round(Math.random())) ? -1 : 1;
+					var leftright:int = Boolean( Math.round(Game.random.nextDoubleRange(0,1))) ? -1 : 1;
 					var newX:int = parentArea.x + (Area.WIDTH * leftright);
 					var newY:int = parentArea.y;
 					

@@ -4,6 +4,9 @@ package pcg
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
 	import org.flixel.plugin.FlxSpriteDeluxe;
+	
+	import pcg.ai.EnemyAI;
+	import pcg.ai.WalkAI;
 
 	public class Enemy extends FlxSpriteDeluxe
 	{		
@@ -13,10 +16,11 @@ package pcg
 		
 		[Embed(source = "../../assets/zombie.png")] private var _playerImage:Class;
 		[Embed(source = "../../assets/muzzle.png")] private var _muzzleImage:Class;
+		[Embed(source="../../assets/soundz/hurt.mp3")] private var _hurtSound:Class;
 		
 		private var _type:EnemyType;
 		
-		private var _ai:EnemyAI;
+		protected var _ai:EnemyAI;
 		
 		private var _healthBar:Healthbar;
 		private var _damageTexts:FlxGroup;
@@ -36,8 +40,8 @@ package pcg
 			if(enemyType == null)
 				enemyType = new EnemyType();
 			
-			this._ai = new EnemyAI(this);
-			this._ai.target = Game.player;
+			this._ai = new WalkAI(this);
+			this._ai.setTarget(Game.player);
 			this._type = enemyType;
 			this.loadGraphic(_playerImage, true, true, 16, 16);
 			this.addAnimation("idle", [0], 10);
@@ -66,34 +70,6 @@ package pcg
 			add(_healthBar);
 		}
 		
-		override public function update():void 
-		{
-			super.update();
-			
-			_ai.update();
-			checkAnimation();
-
-			_justLandedTimer = Math.max(0, _justLandedTimer -= FlxG.elapsed);
-			
-			if (this.justTouched(FLOOR))
-			{
-				_jumping = false;
-				play("jump_end", true);
-				_justLandedTimer = 0.2;
-				
-				if(!alive)
-				{
-					this.velocity.x = 0;
-					this.velocity.y = 0;
-					this.play("dead");
-				}
-			}
-			
-			checkAnimation();
-			
-			velocity.y += 13;
-		}
-		
 		private function checkAnimation():void
 		{
 			if(alive)
@@ -113,26 +89,31 @@ package pcg
 				facing = LEFT;
 		}
 		
-		internal function walk():void
+		public function walk():void
 		{
 			velocity.x = _type.speed * (facing == LEFT ? -1 : 1);
 		}
 		
-		internal function turnAround():void
+		public function turnAround():void
 		{
 			facing = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
 		}
 		
 		public function jump():void
 		{
-			
+			if (!_jumping) // if already jumping..
+			{
+				play("jump");
+				this.velocity.y = -JUMP_POWER;
+				_jumping = true;
+			}
 		}
 		
 		public function hit(bullet:Bullet):void
 		{
-			flash(0xffffff, 0.05);
+			flash(0xffffff, 0.09);
 			
-			var critical:Boolean = (Math.random() * 101) < bullet.weapon.stats.accuracy;
+			var critical:Boolean = (Game.random.nextDoubleRange(0,1) * 101) < bullet.weapon.stats.accuracy;
 			var damage:uint = bullet.weapon.stats.damage + (critical ? bullet.weapon.stats.damage / 100 * bullet.weapon.stats.headshotDamage : 0);
 			health -= damage;
 			
@@ -141,6 +122,8 @@ package pcg
 			
 			var damageText:DamageText = _damageTexts.getFirstDead() as DamageText;
 			damageText.activate(damage, critical);
+			
+			FlxG.play(_hurtSound);
 			
 			if(health <= 0)
 			{
@@ -151,17 +134,20 @@ package pcg
 		
 		override public function kill():void
 		{
+			super.kill();
+			
 			remove(_healthBar);
 			
-			this.alive = false;
-			
-			this.velocity.x *= 20;
-			this.velocity.y = -120;
-			this.play("dead_falling");
-			
-			var event:GameEvent = new GameEvent(GameEvent.ENEMY_SPAWNED);
+			var event:GameEvent = new GameEvent(GameEvent.ENEMY_KILLED);
 			event.enemy = this;
 			Game.emitGameEvent(event);
+		}
+		
+		override public function destroy():void
+		{
+			_ai.destroy();
+			
+			super.destroy();
 		}
 
 		public function get type():EnemyType

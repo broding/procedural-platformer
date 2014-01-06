@@ -11,6 +11,7 @@ package pcg
 	{
 		private var _level:Level;
 		private var _text:FlxText;
+		private var _startedTransition:Boolean;
 		
 		[Embed(source = "../../assets/fonts/small_bold_pixel-7.ttf", fontName = "bold20", embedAsCFF="false", mimeType="application/x-font")]
 		private var FontClass:Class;
@@ -23,12 +24,14 @@ package pcg
 		
 		public function LoadState()
 		{
-			
+			_startedTransition = false;
 		}
 		
 		override public function create():void
 		{
 			super.create();
+			
+			FlxG.flash(0xff000000, 0.3);
 			
 			_text = new FlxText(0, 200, 320, "Building you a level..", true);
 			_text.alignment = "center";
@@ -42,8 +45,15 @@ package pcg
 		{
 			super.update();
 			
-			if(_level.loaded)
-				FlxG.switchState(new GameState(_level));
+			if(_level.loaded && !_startedTransition)
+			{
+				_startedTransition = true;
+				FlxG.fade(0xff000000, 1, function():void
+				{
+					FlxG.switchState(new GameState(_level));
+				});
+			}
+				
 		}
 	}
 }

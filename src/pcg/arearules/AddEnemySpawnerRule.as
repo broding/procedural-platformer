@@ -1,6 +1,7 @@
 package pcg.arearules
 {
 	import pcg.Area;
+	import pcg.Game;
 	import pcg.TileType;
 
 	public class AddEnemySpawnerRule implements AreaRule
@@ -19,13 +20,13 @@ package pcg.arearules
 					return map.getTile(x, y);
 			}
 			
-			_x = Math.floor(Math.random() * map.width);
-			_y = Math.floor(Math.random() * map.height);
+			_x = Math.floor(Game.random.nextDoubleRange(0,1) * map.width);
+			_y = Math.floor(Game.random.nextDoubleRange(0,1) * map.height);
 			
 			while(map.getTile(_x,_y) != 0)
 			{
-				_x = Math.floor(Math.random() * map.width);
-				_y = Math.floor(Math.random() * map.height);
+				_x = Math.floor(Game.random.nextDoubleRange(0,1) * map.width);
+				_y = Math.floor(Game.random.nextDoubleRange(0,1) * map.height);
 			}
 			
 			_added = true;
